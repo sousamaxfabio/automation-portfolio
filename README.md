@@ -15,5 +15,5 @@ Designer turned AI Automator. I help businesses save 15h/week with AI automation
 ## Tools
 n8n, Make, OpenAI API, Git, GitHub, Python (learning), Docker (learning)
 
-## Contact
-LinkedIn: [your LinkedIn link]
+## Contact: GitHub @sousamaxfabio / Canary Islands, EU Remote GNT+1
+LinkedIn: coming soon
