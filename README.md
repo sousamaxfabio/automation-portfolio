@@ -17,3 +17,4 @@ n8n, Make, OpenAI API, Git, GitHub, Python (learning), Docker (learning)
 
 ## Contact: GitHub @sousamaxfabio / Canary Islands, EU Remote GNT+1
 LinkedIn: coming soon
+## day 3 - branching practice
