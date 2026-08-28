@@ -1,0 +1,95 @@
+{
+  "name": "Day 6 - webhook JSON Integration",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "day6-webhook",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -48,
+        144
+      ],
+      "id": "7a61e0c8-fdae-4c32-a8ef-6295a04f0b09",
+      "name": "Webhook",
+      "webhookId": "210c9a94-82e5-4c3b-9928-c4159b7cae2f"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c0410444-e053-4da0-8195-92904a254797",
+              "name": "message",
+              "value": "={{ 'Hello ' + $json.body.name + ', you sent task ' + $json.body.task }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        144,
+        144
+      ],
+      "id": "fc61e7d6-a16e-4463-9b7e-e211e4357c63",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        368,
+        144
+      ],
+      "id": "e17a4d3e-a6fe-416b-955c-ecd3acb89fb5",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "91318330-b828-4f86-a7f9-9c0e122eecd6",
+  "meta": {
+    "instanceId": "353de91b73c515986131eb03af10a93fa04a2fb101bf2415d437f969efb9351f"
+  },
+  "nodeGroups": [],
+  "id": "vc9PXggmvYYtgacB",
+  "tags": []
+}
