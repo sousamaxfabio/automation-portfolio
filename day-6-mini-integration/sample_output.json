@@ -1,0 +1,6 @@
+{
+  "customer_name": "Fabio",
+  "contact_email": "[fabio@example.com]",
+  "request": "I need help automating invoice processing",
+  "status": "received"
+}
