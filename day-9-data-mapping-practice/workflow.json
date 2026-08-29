@@ -1,0 +1,163 @@
+{
+  "name": "Day 9 – Data Mapping Practice",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "11df9ca0-bcae-4537-8acc-e622ad75ed77",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ffe98d0e-2da0-4767-87e8-cf3037b25a64",
+              "name": "customer_name",
+              "value": "Fabio ",
+              "type": "string"
+            },
+            {
+              "id": "07db85e9-1771-4e01-87c4-5d32dbbd346b",
+              "name": "service",
+              "value": "invoice automation",
+              "type": "string"
+            },
+            {
+              "id": "b6f3176c-103e-445c-b566-96b87ef6311e",
+              "name": "urgency",
+              "value": "high",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "cd94de95-e2a8-4135-b385-9877cbab169c",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "dd639958-40e8-4d21-985d-931d486213d4",
+              "name": "copied_name",
+              "value": "={{ $json.customer_name }}",
+              "type": "string"
+            },
+            {
+              "id": "c6d45774-41d5-4a64-a2d1-3ac29033cf94",
+              "name": "confirmation_message",
+              "value": "=Hello {{ $json.customer_name }}, your request for {{ $json.service }} has been received.",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        448,
+        0
+      ],
+      "id": "e65b4da3-828e-42a5-ae20-f74c14e64255",
+      "name": "build confirmation"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "bf0db782-9f94-4efa-9a47-288878679fcb",
+              "leftValue": "={{ $json.service }}",
+              "rightValue": "invoice automation",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        672,
+        0
+      ],
+      "id": "fdeda2cc-d8f7-4fbf-a9f9-d943e1a5911c",
+      "name": "check service"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "build confirmation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "build confirmation": {
+      "main": [
+        [
+          {
+            "node": "check service",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "825fb44d-6482-4ace-a638-1ca42fa4384b",
+  "meta": {
+    "instanceId": "353de91b73c515986131eb03af10a93fa04a2fb101bf2415d437f969efb9351f"
+  },
+  "nodeGroups": [],
+  "id": "pOAUdtEWBPs079TC",
+  "tags": []
+}
