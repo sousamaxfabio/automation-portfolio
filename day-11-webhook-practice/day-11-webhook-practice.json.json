@@ -1,0 +1,170 @@
+{
+  "name": "Day 11 – Webhook Practice",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "day-11-practice",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -272,
+        0
+      ],
+      "id": "32211346-6b90-4460-b71e-1d49614007f6",
+      "name": "Webhook",
+      "webhookId": "a72beabd-55c3-4501-a65e-d321f3e321f3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ea0438d9-9fb8-4997-8a6e-d32c964fa2ec",
+              "name": "name",
+              "value": "={{ $json.body.name }}",
+              "type": "string"
+            },
+            {
+              "id": "d46985ed-bfa0-4062-a035-c7b6725a82d5",
+              "name": "message",
+              "value": "={{ \"Hello, \" + $json.body.name + \"! Your request was received.\" }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        144,
+        0
+      ],
+      "id": "5dcdd035-ea8b-49bd-96c1-cb7fcf1c5bf5",
+      "name": "Prepare Response"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        352,
+        0
+      ],
+      "id": "00345c34-3200-49fe-9edf-d8128b863ba8",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ee77b3d0-cb74-48dd-b95c-16d5a8ce11c6",
+              "leftValue": "={{ typeof $json.body?.name === 'string' && $json.body.name.trim().length > 0 }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -48,
+        0
+      ],
+      "id": "c7c28586-29e0-4bc5-aa5c-830723ce475b",
+      "name": "Check name"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"error\": \"Please provide a non-empty name as text.\"\n}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        224,
+        144
+      ],
+      "id": "d88d0b24-fc04-4c18-b94e-17b229437d5f",
+      "name": "Return Invalid Name"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Check name",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Response": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check name": {
+      "main": [
+        [
+          {
+            "node": "Prepare Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Return Invalid Name",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "4cee8ac3-571b-4fd3-a6b8-590d7b6843be",
+  "meta": {
+    "instanceId": "353de91b73c515986131eb03af10a93fa04a2fb101bf2415d437f969efb9351f"
+  },
+  "nodeGroups": [],
+  "id": "ybxqkvyRoXh5mL9U",
+  "tags": []
+}
