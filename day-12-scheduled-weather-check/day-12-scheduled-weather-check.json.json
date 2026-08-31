@@ -1,0 +1,245 @@
+{
+  "name": "Day 12 – Scheduled Weather Check",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://api.open-meteo.com/v1/forecast",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "latitude",
+              "value": "28.1235"
+            },
+            {
+              "name": "longitude",
+              "value": "-15.4363"
+            },
+            {
+              "name": "current",
+              "value": "temperature_2m"
+            },
+            {
+              "name": "timezone",
+              "value": "Atlantic/Canary"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        -80,
+        0
+      ],
+      "id": "a760803f-5b81-49e9-8042-5a14d0715a3c",
+      "name": "Get Live Weather"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b30e5dc5-a0fa-4dbd-8e8c-4c8d27aa4735",
+              "name": "temperature",
+              "value": "={{ $json.current.temperature_2m }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        112,
+        0
+      ],
+      "id": "bffdbcd7-5f92-4ef0-8573-c48bedf1dbd0",
+      "name": "Extract Temperature"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "81e34e35-8d3e-469d-8eac-6569a9c05201",
+              "leftValue": "={{ $json.temperature }}",
+              "rightValue": 25,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        288,
+        0
+      ],
+      "id": "96f34393-6482-47bb-a03d-49b22d0981a8",
+      "name": "Check Warm Threshold"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "71f9c319-a6fa-4831-be99-c8529a8d72ad",
+              "name": "weather_status",
+              "value": "warm",
+              "type": "string"
+            },
+            {
+              "id": "4c607c05-0be9-49e8-92d7-9d040f861593",
+              "name": "message",
+              "value": "=It is currently {{ $json.temperature }}°C in Las Palmas. It is warm.",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        496,
+        -96
+      ],
+      "id": "2b838dbd-8ac4-4045-a86c-8da5c06bfa24",
+      "name": "Create Warm Message"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6d00eaea-e92a-4c49-b743-353309cfc54e",
+              "name": "weather_status",
+              "value": "below_threshold",
+              "type": "string"
+            },
+            {
+              "id": "55bb60ec-5849-42f2-9d20-795cb4168035",
+              "name": "message",
+              "value": "=It is currently {{ $json.temperature}}°C in Las Palmas. It is below the warm threshold.",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        496,
+        96
+      ],
+      "id": "5e9f8696-a0ce-43a7-b05d-7e92b71c2413",
+      "name": "Create Cool Message"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -240,
+        0
+      ],
+      "id": "0e4203b7-b0de-4cfd-9d72-84a4ae97aff6",
+      "name": "Schedule Trigger"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Get Live Weather": {
+      "main": [
+        [
+          {
+            "node": "Extract Temperature",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Temperature": {
+      "main": [
+        [
+          {
+            "node": "Check Warm Threshold",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Warm Threshold": {
+      "main": [
+        [
+          {
+            "node": "Create Warm Message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create Cool Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Live Weather",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "timezone": "Atlantic/Canary",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "e1bc2c0e-a1e1-41ed-8eea-5303f1dbbeec",
+  "meta": {
+    "instanceId": "353de91b73c515986131eb03af10a93fa04a2fb101bf2415d437f969efb9351f"
+  },
+  "nodeGroups": [],
+  "id": "swmzAYgwwnCrLt4e",
+  "tags": []
+}
