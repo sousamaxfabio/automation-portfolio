@@ -1,0 +1,113 @@
+{
+  "name": "Day 12 — Gmail Integration",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -368,
+        -48
+      ],
+      "id": "a5c9d650-af4b-4c74-88f9-f9e7b6a14203",
+      "name": "Start Gmail Test"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a668ccb9-30dd-4d57-a98f-f9e1be2ae53c",
+              "name": "recipient",
+              "value": "sousamax.fabio@gmail.com",
+              "type": "string"
+            },
+            {
+              "id": "c04e5612-0a8e-4215-b8d6-1f9b7ee3dfd5",
+              "name": "subject",
+              "value": "Day 12 automation update",
+              "type": "string"
+            },
+            {
+              "id": "530b470a-1924-41c5-982b-293583a92495",
+              "name": "message",
+              "value": "The Day 12 Gmail workflow completed successfully",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -176,
+        -48
+      ],
+      "id": "9d6dc76f-25a4-4275-b73e-6417898e48e7",
+      "name": "Prepare Email Data"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.recipient }}",
+        "subject": "={{ $json.subject }}",
+        "emailType": "text",
+        "message": "={{ $json.message }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        32,
+        -48
+      ],
+      "id": "4a680630-59d8-4447-abd9-a5320150b00d",
+      "name": "Send Gmail Message",
+      "webhookId": "9cb20a98-1e7d-4b46-8f9d-e3b216788db8",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "mTx4qBzKLgRjillp",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Start Gmail Test": {
+      "main": [
+        [
+          {
+            "node": "Prepare Email Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Email Data": {
+      "main": [
+        [
+          {
+            "node": "Send Gmail Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "62631867-134c-40cd-9c85-7eb93e490396",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "353de91b73c515986131eb03af10a93fa04a2fb101bf2415d437f969efb9351f"
+  },
+  "nodeGroups": [],
+  "id": "Z0XlwyKL0ie7P154",
+  "tags": []
+}

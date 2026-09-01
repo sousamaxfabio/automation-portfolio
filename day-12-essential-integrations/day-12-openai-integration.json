@@ -1,0 +1,78 @@
+{
+  "name": "Day 12 - OpenAI Integration",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -320,
+        0
+      ],
+      "id": "25b585c7-a584-4ae4-8248-4622d3f9f95f",
+      "name": "Start OpenAI Test",
+      "notes": "Day 12 OpenAI test trigger"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-5.6-luna",
+          "mode": "list",
+          "cachedResultName": "GPT-5.6-LUNA"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "Classify this customer request into one category: Billing, Technical Support, Sales, or Other. Return only the category. Request: I cannot log in to my account after resetting my password."
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.3,
+      "position": [
+        -96,
+        0
+      ],
+      "id": "f009bcbe-d36f-4e06-892c-6e3edc841479",
+      "name": "Classify Support Request",
+      "credentials": {
+        "openAiApi": {
+          "id": "EHepOPPZZTriw9sc",
+          "name": "OpenAI account"
+        }
+      },
+      "notes": "Classifies customer support requests"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Start OpenAI Test": {
+      "main": [
+        [
+          {
+            "node": "Classify Support Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "733f4fac-8f01-4e33-ad7c-9d09f118a3bd",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "353de91b73c515986131eb03af10a93fa04a2fb101bf2415d437f969efb9351f"
+  },
+  "nodeGroups": [],
+  "id": "O4MCbHeNxtPYqsYX",
+  "tags": []
+}

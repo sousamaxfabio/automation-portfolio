@@ -1,0 +1,70 @@
+{
+  "name": "Day 12 — Slack Integration",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -320,
+        -16
+      ],
+      "id": "3dc5a805-80f1-458a-9e8b-b542d969f3cc",
+      "name": "Start Slack Test"
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "new-channel",
+          "mode": "name"
+        },
+        "text": "My first Slack message sent successfully from n8n.",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.7,
+      "position": [
+        -112,
+        -16
+      ],
+      "id": "3e8863ba-9c72-434e-949e-efc956ac31b1",
+      "name": "Send Slack Message",
+      "webhookId": "335b4be4-1543-4527-91f6-a872ab041be9",
+      "credentials": {
+        "slackApi": {
+          "id": "NaFdEUOS9XdD2AVe",
+          "name": "Slack account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Start Slack Test": {
+      "main": [
+        [
+          {
+            "node": "Send Slack Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "d0edb671-b0ce-4869-8ae5-ff610b5029af",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "353de91b73c515986131eb03af10a93fa04a2fb101bf2415d437f969efb9351f"
+  },
+  "nodeGroups": [],
+  "id": "PeqoSkA5MwvNmBWN",
+  "tags": []
+}

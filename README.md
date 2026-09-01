@@ -8,7 +8,7 @@
 ## 📌 About Me
 I am building real automation systems with Python, n8n, and Make. This repo is my public lab.
 
-**Current Focus:** Python Automations + API Integrations
+**Current Focus:** n8n Automations + API Integrations
 **Location:** Canary Islands, Spain
 **Goal:** Junior Automation Engineer role
 
@@ -20,26 +20,30 @@ I am building real automation systems with Python, n8n, and Make. This repo is m
 
 ## ✅ Progress Tracker
 
-### Week 1 — Foundation [DONE]
-- [x] Day 1: Git & GitHub Setup
-- [x] Day 2: Professional README
-- [x] Day 3: Branching, PRs &.gitignore
-- [ ] Day 4: Professional Repos (in progress)
+- [x] Days 1–4: Git, GitHub, and repository foundations
+- [x] Day 5: API fundamentals
+- [x] Day 6: Python mini integration
+- [x] Day 9: n8n data mapping and live weather API
+- [x] Day 10: n8n data and expressions
+- [x] Day 11: Webhooks and input validation
+- [x] Day 12: Scheduling, Google Sheets, Gmail, Slack, OpenAI, and Airtable
 
-### Week 2 — Python Basics (Coming Soon)
-- [ ] File automation
-- [ ] API calls
-- [ ] Error handling
+## 🚀 Recent n8n Projects
+
+- [Day 12 — Scheduled Weather Check](day-12-scheduled-weather-check/README.md)
+- [Day 12 — Essential Integrations](day-12-essential-integrations/README.md)
+- [Day 11 — Webhook Practice](day-11-webhook-practice/README.md)
+- [Day 10 — Data and Expressions](day-10-data-and-expressions/README.md)
+- [Day 9 — Live Weather Check](day-9-live-weather-check/README.md)
 
 ## 🛠️ Tech Stack
 - **Languages:** Python, Markdown
-- **Tools:** Git, GitHub, VS Code
-- **Platforms:** n8n, Make (soon)
+- **Tools:** Git, GitHub, VS Code, Docker
+- **Platforms:** n8n, Google Cloud, Gmail, Google Sheets, Slack, OpenAI, Airtable
 
 ## 📫 How to Reach Me
 - GitHub: [@sousamaxfabio](https://github.com/sousamaxfabio)
 - LinkedIn: (add your link here)
 
 ---
-*This README is updated every day. Last update: Day 4*
-.
+*Last update: Day 12*
