@@ -1,0 +1,681 @@
+{
+  "name": "Days 1–12 Practice Lab",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "practice-service-request",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -672,
+        -160
+      ],
+      "id": "f22576ea-cb8f-4016-a9fe-fdc39638c745",
+      "name": "Webhook",
+      "webhookId": "2160cdf3-bd06-4434-801b-41016efff87e"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "db17b697-fb22-4c8a-a895-7ff16f28e128",
+              "leftValue": "={{ $json.urgency }}",
+              "rightValue": "high",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        448,
+        64
+      ],
+      "id": "d3a7a6a3-428c-4e48-a184-930d7d7a19d1",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "315ae840-3027-43e6-8451-32c2f7504788",
+              "name": "routingStatus",
+              "value": "escalated",
+              "type": "string"
+            },
+            {
+              "id": "85ce556f-9b8b-4eed-8403-50db66b28cbe",
+              "name": "responseMessage",
+              "value": "={{ 'Request from ' + $json.requesterName + ' has been marked for urgent attention.' }}",
+              "type": "string"
+            },
+            {
+              "id": "5abfd53e-c7e8-4e94-9fd8-1fe738f833de",
+              "name": "=responseDueAt",
+              "value": "={{ $now.plus({ minutes: 30 }).toISO() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        704,
+        -160
+      ],
+      "id": "613bbf1a-0926-4016-ac2e-e180bacd3b3e",
+      "name": "Create Urgent Response"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a6d90791-fb78-4fc8-9afa-a6e34d227ead",
+              "name": "routingStatus",
+              "value": "standard",
+              "type": "string"
+            },
+            {
+              "id": "f0d84610-bbdd-44a1-a01e-d18dceabdd1a",
+              "name": "responseMessage",
+              "value": "={{ 'Request from ' + $json.requesterName + ' has been added to the standard queue.' }}",
+              "type": "string"
+            },
+            {
+              "id": "98c86dd5-72c5-41a4-b177-65754e17fbef",
+              "name": "=responseDueAt",
+              "value": "={{ $now.plus({ hours: 24 }).toISO() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        704,
+        288
+      ],
+      "id": "934e4aa6-9c0d-4485-9f68-c557ba9ec335",
+      "name": "Create Standard Response"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        864,
+        288
+      ],
+      "id": "32c8d424-04f8-4d9d-8e76-cc2108e7a3c2",
+      "name": "Return Standard Response"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        864,
+        -128
+      ],
+      "id": "972af89f-18fe-4b27-839f-0b160ee74c25",
+      "name": "Return Urgent Response"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "94e966a7-0db7-4c8a-bf88-14c86ab66d2d",
+              "name": "sucess",
+              "value": false,
+              "type": "boolean"
+            },
+            {
+              "id": "347a6375-a33a-4154-aa04-acdf21e4ae95",
+              "name": "error",
+              "value": "urgency is required and must be either 'high' or 'normal'",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        208,
+        256
+      ],
+      "id": "9450db0a-3236-46c3-87ea-c0f51415bd4f",
+      "name": "Create Validation Error"
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        400,
+        256
+      ],
+      "id": "7bec88f5-7f15-42a9-b5a4-f7c6c7916296",
+      "name": "Return Validation Error"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d6fbb74a-1d1a-4d80-ac2d-b9678adbe69e",
+              "leftValue": "={{ $json.body.urgency }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -128,
+        128
+      ],
+      "id": "82492fa6-891e-407a-bb12-278e820b52ae",
+      "name": "Validate Urgency Present"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "5b8b2318-76e1-405f-8109-6a4b52d95510",
+              "leftValue": "={{ ['high', 'normal'].includes(String($json.body.urgency).trim().toLowerCase()) }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        64,
+        64
+      ],
+      "id": "fb6bdf51-0161-4d8c-a8de-32629c560035",
+      "name": "Validate Urgency Value"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "fd0f03a1-5358-4d85-aa65-3359424e0707",
+              "leftValue": "={{ String($json.body.name ?? '').trim() }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "946d8f3d-4836-4711-bee7-86b61452299b",
+              "leftValue": "={{ String($json.body.email ?? '').trim() }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "4cde04a9-ba83-47e4-aaba-1f77c8ea798e",
+              "leftValue": "={{ String($json.body.message ?? '').trim() }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -496,
+        -160
+      ],
+      "id": "23cf827d-f26a-4dfd-b88e-a5acacf6698b",
+      "name": "Validate Required Fields"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "658b1aef-b7be-4f42-a396-39cd9bb08b82",
+              "name": "sucess",
+              "value": false,
+              "type": "boolean"
+            },
+            {
+              "id": "da592a04-4b5f-47d0-9e6a-ce223687efd5",
+              "name": "error",
+              "value": "name, email, and message are required",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -272,
+        -336
+      ],
+      "id": "9ad84da0-991c-494c-8f6e-8202d6d616f7",
+      "name": "Create Missing Fields Error"
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        -48,
+        -336
+      ],
+      "id": "5c4d8ea4-9c93-478d-b7be-c81c5132eb7a",
+      "name": "Return Missing Fields Error"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "11fca289-ec56-4c8d-b990-117e5654ba25",
+              "leftValue": "={{ /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(String($json.body.email).trim()) }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -464,
+        64
+      ],
+      "id": "d1487fc8-3454-4e0c-903f-303802145cd4",
+      "name": "Validate Email Format"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "327b631b-d112-4a4a-b7ea-54bdfeed3d26",
+              "name": "sucess",
+              "value": false,
+              "type": "boolean"
+            },
+            {
+              "id": "50e8c53a-c8b7-4026-9973-e7a3a86a00e7",
+              "name": "error",
+              "value": "email must have a valid format",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -128,
+        -32
+      ],
+      "id": "2eb162f7-f86e-4bee-82c3-6c80b1ca8ee9",
+      "name": "Create Invalid Email Error"
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        128,
+        -176
+      ],
+      "id": "fde0d95a-694a-4c3d-8af4-a56d200b4dee",
+      "name": "Return Invalid Email Error"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b36e74ff-d4fe-41d1-a77c-baa96a6cbb69",
+              "name": "requesterName",
+              "value": "={{ $json.body.name }}",
+              "type": "string"
+            },
+            {
+              "id": "9e7ad44c-2758-49f0-adaf-fbc56e6431dd",
+              "name": "requesterEmail",
+              "value": "={{ $json.body.email }}",
+              "type": "string"
+            },
+            {
+              "id": "5b15e73f-40cd-4164-8e09-5931b10ed07e",
+              "name": "requestMessage",
+              "value": "={{ $json.body.message }}",
+              "type": "string"
+            },
+            {
+              "id": "46714bd1-c6e9-44e3-98ea-dea32143161f",
+              "name": "urgency",
+              "value": "={{ String($json.body.urgency).trim().toLowerCase() }}",
+              "type": "string"
+            },
+            {
+              "id": "b9f5c746-0994-4a8c-bbfd-1181d7432c84",
+              "name": "=recievedAt",
+              "value": "={{ $now.toISO() }}",
+              "type": "string"
+            },
+            {
+              "id": "7402adb5-8943-4886-acee-09c9c5230e0a",
+              "name": "=requestId",
+              "value": "={{ $execution.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        256,
+        64
+      ],
+      "id": "1ee054a4-dace-40b3-a02a-09fbeb3e5b67",
+      "name": "Normalize and Enrich Request"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Validate Required Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Create Urgent Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create Standard Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Standard Response": {
+      "main": [
+        [
+          {
+            "node": "Return Standard Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Urgent Response": {
+      "main": [
+        [
+          {
+            "node": "Return Urgent Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Validation Error": {
+      "main": [
+        [
+          {
+            "node": "Return Validation Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Urgency Present": {
+      "main": [
+        [
+          {
+            "node": "Validate Urgency Value",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create Validation Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Urgency Value": {
+      "main": [
+        [
+          {
+            "node": "Normalize and Enrich Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create Validation Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Required Fields": {
+      "main": [
+        [
+          {
+            "node": "Validate Email Format",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create Missing Fields Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Missing Fields Error": {
+      "main": [
+        [
+          {
+            "node": "Return Missing Fields Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Email Format": {
+      "main": [
+        [
+          {
+            "node": "Validate Urgency Present",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create Invalid Email Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Invalid Email Error": {
+      "main": [
+        [
+          {
+            "node": "Return Invalid Email Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize and Enrich Request": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "timezone": "Atlantic/Canary",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "4f9e992a-d052-4746-ad47-9a096f5bad51",
+  "meta": {
+    "instanceId": "353de91b73c515986131eb03af10a93fa04a2fb101bf2415d437f969efb9351f"
+  },
+  "nodeGroups": [],
+  "id": "zZkY5MJrU7OaUhWQ",
+  "tags": []
+}
