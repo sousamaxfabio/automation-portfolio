@@ -30,7 +30,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.5,
       "position": [
-        -80,
+        -304,
         0
       ],
       "id": "a760803f-5b81-49e9-8042-5a14d0715a3c",
@@ -53,7 +53,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.5,
       "position": [
-        112,
+        -112,
         0
       ],
       "id": "bffdbcd7-5f92-4ef0-8573-c48bedf1dbd0",
@@ -86,7 +86,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        288,
+        80,
         0
       ],
       "id": "96f34393-6482-47bb-a03d-49b22d0981a8",
@@ -116,7 +116,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.5,
       "position": [
-        496,
+        304,
         -96
       ],
       "id": "2b838dbd-8ac4-4045-a86c-8da5c06bfa24",
@@ -146,7 +146,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.5,
       "position": [
-        496,
+        304,
         96
       ],
       "id": "5e9f8696-a0ce-43a7-b05d-7e92b71c2413",
@@ -165,11 +165,95 @@
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.4,
       "position": [
-        -240,
+        -496,
         0
       ],
       "id": "0e4203b7-b0de-4cfd-9d72-84a4ae97aff6",
       "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1lbOepMUSLr3UZEsnJU2yQBArWkEl8qLC9aDHL7xpa0g/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Hoja 1",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "checked_at": "={{ $now.toISO() }}",
+            "temperature": "={{ $json.temperature }}",
+            "weather_status": "={{ $json.weather_status }}",
+            "message": "={{ $json.message }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "checked_at",
+              "displayName": "checked_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "temperature",
+              "displayName": "temperature",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "weather_status",
+              "displayName": "weather_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        528,
+        0
+      ],
+      "id": "a3695204-d5e6-44b7-9987-bdf8cad83433",
+      "name": "Save Weather to Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "7BY6fYZwJvwL2W5o",
+          "name": "Google Sheets account"
+        }
+      }
     }
   ],
   "pinData": {},
@@ -224,6 +308,28 @@
           }
         ]
       ]
+    },
+    "Create Warm Message": {
+      "main": [
+        [
+          {
+            "node": "Save Weather to Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Cool Message": {
+      "main": [
+        [
+          {
+            "node": "Save Weather to Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
@@ -235,8 +341,9 @@
     "callerPolicy": "workflowsFromSameOwner",
     "availableInMCP": false
   },
-  "versionId": "e1bc2c0e-a1e1-41ed-8eea-5303f1dbbeec",
+  "versionId": "6ff82053-e812-4777-b7e6-e863863132bd",
   "meta": {
+    "templateCredsSetupCompleted": true,
     "instanceId": "353de91b73c515986131eb03af10a93fa04a2fb101bf2415d437f969efb9351f"
   },
   "nodeGroups": [],
