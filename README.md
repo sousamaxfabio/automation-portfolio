@@ -27,9 +27,11 @@ I am building real automation systems with Python, n8n, and Make. This repo is m
 - [x] Day 10: n8n data and expressions
 - [x] Day 11: Webhooks and input validation
 - [x] Day 12: Scheduling, Google Sheets, Gmail, Slack, OpenAI, and Airtable
+- [x] Day 13: Human approval with Gmail and conditional routing
 
 ## 🚀 Recent n8n Projects
 
+- [Day 13 — Human Approval](day-13-human-approval/README.md)
 - [Day 12 — Scheduled Weather Check](day-12-scheduled-weather-check/README.md)
 - [Day 12 — Essential Integrations](day-12-essential-integrations/README.md)
 - [Day 11 — Webhook Practice](day-11-webhook-practice/README.md)
@@ -46,4 +48,4 @@ I am building real automation systems with Python, n8n, and Make. This repo is m
 - LinkedIn: (add your link here)
 
 ---
-*Last update: Day 12*
+*Last update: Day 13*

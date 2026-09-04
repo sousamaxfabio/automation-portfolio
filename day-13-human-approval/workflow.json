@@ -25,7 +25,7 @@
             {
               "id": "3d848484-3978-495b-8904-f4c7a8ba5350",
               "name": "requestDetails",
-              "value": "pprove a €500 automation tool subscription",
+              "value": "Approve a €500 automation tool subscription",
               "type": "string"
             },
             {
@@ -50,7 +50,7 @@
     {
       "parameters": {
         "operation": "sendAndWait",
-        "sendTo": "sousamax.fabio@gmail.com",
+        "sendTo": "approver@example.com",
         "subject": "={{ 'Purchase approval required: ' + $json.requestTitle }}",
         "message": "={{ 'A purchase request is waiting for your review.\\n\\nRequest: ' + $json.requestTitle + '\\nDetails: ' + $json.requestDetails + '\\nRequested by: ' + $json.requestedBy + '\\n\\nPlease select Approve or Decline below.' }}",
         "approvalOptions": {
@@ -116,7 +116,7 @@
           "assignments": [
             {
               "id": "bc1a28fd-5e9a-4675-93e8-7e0fc95f5afd",
-              "name": "=requestTitle",
+              "name": "requestTitle",
               "value": "={{ $('Prepare Approval Request').item.json.requestTitle }}",
               "type": "string"
             },
@@ -134,13 +134,13 @@
             },
             {
               "id": "56dd1c0e-7f38-42c2-a247-5cdb58f229fc",
-              "name": "=respondedAt",
+              "name": "respondedAt",
               "value": "={{ $json.data.respondedAt }}",
               "type": "string"
             },
             {
               "id": "de309ef0-0955-4cb9-89ca-f523cdf88dc3",
-              "name": "=resultMessage",
+              "name": "resultMessage",
               "value": "={{ 'Purchase request approved: ' + $('Prepare Approval Request').item.json.requestTitle }}",
               "type": "string"
             }
@@ -163,13 +163,13 @@
           "assignments": [
             {
               "id": "fcf45476-c815-437e-8383-de1c45c06261",
-              "name": "=requestTitle",
+              "name": "requestTitle",
               "value": "={{ $('Prepare Approval Request').item.json.requestTitle }}",
               "type": "string"
             },
             {
               "id": "3f7de63d-2209-4861-911f-d3e04dd5c647",
-              "name": "=requestedBy",
+              "name": "requestedBy",
               "value": "={{ $('Prepare Approval Request').item.json.requestedBy }}",
               "type": "string"
             },
@@ -181,13 +181,13 @@
             },
             {
               "id": "9a5e4e3c-7336-48f6-b3dd-3bd74cb55efe",
-              "name": "=respondedAt",
+              "name": "respondedAt",
               "value": "={{ $json.data.respondedAt }}",
               "type": "string"
             },
             {
               "id": "fd894224-b891-4451-9df8-14d884c4d9ea",
-              "name": "=resultMessage",
+              "name": "resultMessage",
               "value": "={{ 'Purchase request declined: ' + $('Prepare Approval Request').item.json.requestTitle }}",
               "type": "string"
             }
@@ -264,7 +264,7 @@
     "executionOrder": "v1",
     "binaryMode": "separate"
   },
-  "versionId": "151be3b1-4756-4055-a072-b210d9413182",
+  "versionId": "81627717-4dce-45c6-8bff-5fbe6902bcf4",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "353de91b73c515986131eb03af10a93fa04a2fb101bf2415d437f969efb9351f"
