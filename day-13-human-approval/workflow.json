@@ -1,0 +1,275 @@
+{
+  "name": "Day 13 - Human Approval",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -304,
+        -96
+      ],
+      "id": "430f6ed7-da26-45b5-a50a-3cfb7f817e93",
+      "name": "Start Approval Test"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1db35ecb-f29a-44ae-8fba-4d86e1d77caf",
+              "name": "requestTitle",
+              "value": "Software purchase",
+              "type": "string"
+            },
+            {
+              "id": "3d848484-3978-495b-8904-f4c7a8ba5350",
+              "name": "requestDetails",
+              "value": "pprove a €500 automation tool subscription",
+              "type": "string"
+            },
+            {
+              "id": "64f76bf0-a811-4bfb-8b20-e186b4dfd305",
+              "name": "requestedBy",
+              "value": "Fabio",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -80,
+        -96
+      ],
+      "id": "d4ce2285-55e9-4c2e-b2d5-c4fdddb4518d",
+      "name": "Prepare Approval Request"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "sendTo": "sousamax.fabio@gmail.com",
+        "subject": "={{ 'Purchase approval required: ' + $json.requestTitle }}",
+        "message": "={{ 'A purchase request is waiting for your review.\\n\\nRequest: ' + $json.requestTitle + '\\nDetails: ' + $json.requestDetails + '\\nRequested by: ' + $json.requestedBy + '\\n\\nPlease select Approve or Decline below.' }}",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        144,
+        -96
+      ],
+      "id": "79ad7c9b-3735-419f-8ac4-a00f03ee92e0",
+      "name": "Request Purchase Approval",
+      "webhookId": "06a38e94-27c3-4d7e-92cf-f83c76970772",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "mTx4qBzKLgRjillp",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "fd2eeddb-0873-43c0-b805-40911f85a9ae",
+              "leftValue": "={{ $json.data.approved }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        368,
+        -96
+      ],
+      "id": "7a9dd6cf-16a7-48a7-bb2f-473ea96a8a3c",
+      "name": "Was Purchase Approved?"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "bc1a28fd-5e9a-4675-93e8-7e0fc95f5afd",
+              "name": "=requestTitle",
+              "value": "={{ $('Prepare Approval Request').item.json.requestTitle }}",
+              "type": "string"
+            },
+            {
+              "id": "eca5d178-f186-43ef-8f6d-d9155847574b",
+              "name": "requestedBy",
+              "value": "={{ $('Prepare Approval Request').item.json.requestedBy }}",
+              "type": "string"
+            },
+            {
+              "id": "af5fb558-adad-4a6f-a800-d49e4d1b24dd",
+              "name": "approvalStatus",
+              "value": "approved",
+              "type": "string"
+            },
+            {
+              "id": "56dd1c0e-7f38-42c2-a247-5cdb58f229fc",
+              "name": "=respondedAt",
+              "value": "={{ $json.data.respondedAt }}",
+              "type": "string"
+            },
+            {
+              "id": "de309ef0-0955-4cb9-89ca-f523cdf88dc3",
+              "name": "=resultMessage",
+              "value": "={{ 'Purchase request approved: ' + $('Prepare Approval Request').item.json.requestTitle }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        592,
+        -208
+      ],
+      "id": "34f509a5-f624-42af-925a-fd9d9fb40a81",
+      "name": "Create Approved Result"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fcf45476-c815-437e-8383-de1c45c06261",
+              "name": "=requestTitle",
+              "value": "={{ $('Prepare Approval Request').item.json.requestTitle }}",
+              "type": "string"
+            },
+            {
+              "id": "3f7de63d-2209-4861-911f-d3e04dd5c647",
+              "name": "=requestedBy",
+              "value": "={{ $('Prepare Approval Request').item.json.requestedBy }}",
+              "type": "string"
+            },
+            {
+              "id": "831198d0-d9bf-4228-a856-6333105dc032",
+              "name": "approvalStatus",
+              "value": "declined",
+              "type": "string"
+            },
+            {
+              "id": "9a5e4e3c-7336-48f6-b3dd-3bd74cb55efe",
+              "name": "=respondedAt",
+              "value": "={{ $json.data.respondedAt }}",
+              "type": "string"
+            },
+            {
+              "id": "fd894224-b891-4451-9df8-14d884c4d9ea",
+              "name": "=resultMessage",
+              "value": "={{ 'Purchase request declined: ' + $('Prepare Approval Request').item.json.requestTitle }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        592,
+        0
+      ],
+      "id": "39fd4f17-0487-4923-9bbb-19ac5f652640",
+      "name": "Create Declined Result."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Start Approval Test": {
+      "main": [
+        [
+          {
+            "node": "Prepare Approval Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Approval Request": {
+      "main": [
+        [
+          {
+            "node": "Request Purchase Approval",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Request Purchase Approval": {
+      "main": [
+        [
+          {
+            "node": "Was Purchase Approved?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Was Purchase Approved?": {
+      "main": [
+        [
+          {
+            "node": "Create Approved Result",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create Declined Result.",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "151be3b1-4756-4055-a072-b210d9413182",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "353de91b73c515986131eb03af10a93fa04a2fb101bf2415d437f969efb9351f"
+  },
+  "nodeGroups": [],
+  "id": "VFaZRgQFDvcYycoC",
+  "tags": []
+}
