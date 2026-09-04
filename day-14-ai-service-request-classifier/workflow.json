@@ -1,0 +1,565 @@
+{
+  "name": "Day 14 - AI Service Request Classifier",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ai-service-request",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -416,
+        -528
+      ],
+      "id": "32380c57-f539-4bbe-b9fd-fc42a82b9f92",
+      "name": "Receive Service Request",
+      "webhookId": "d0b9f8c3-2269-4740-ae56-285541d3a56c"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"success\": true,\n  \"message\": \"Service request received\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1312,
+        -528
+      ],
+      "id": "725c166d-6aaa-441f-938d-e89541241ab5",
+      "name": "Return Form Response"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "35c4edb1-9b92-4e32-8e89-0c8fde709204",
+              "name": "requester_name",
+              "value": "={{ $json.body.requester_name }}",
+              "type": "string"
+            },
+            {
+              "id": "2e10378b-4f1b-4887-be39-0843b8acbb26",
+              "name": "requester_email",
+              "value": "={{ $json.body.requester_email }}",
+              "type": "string"
+            },
+            {
+              "id": "5cdac667-3469-4b2d-94c8-f221ae7f64cc",
+              "name": "request_title",
+              "value": "={{ $json.body.request_title }}",
+              "type": "string"
+            },
+            {
+              "id": "984933a9-10fc-42df-89f9-7d8eb5c433f6",
+              "name": "request_details",
+              "value": "={{ $json.body.request_details }}",
+              "type": "string"
+            },
+            {
+              "id": "1f25f045-2299-49c6-934a-f740be3223cc",
+              "name": "submitted_at",
+              "value": "={{ $now.toISO() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -192,
+        -528
+      ],
+      "id": "dae77628-f177-4705-946d-38e5089d2e3f",
+      "name": "Prepare Request Data"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-5.6-luna",
+          "mode": "list",
+          "cachedResultName": "GPT-5.6-LUNA"
+        },
+        "responses": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You classify internal service requests.\n\nReturn exactly one valid JSON object. Do not use Markdown, code fences, or explanatory text.\n\nUse exactly these fields:\n{\n  \"category\": \"Access, Hardware, Software, Billing, HR, Facilities, or Other\",\n  \"urgency\": \"Low, Medium, High, or Critical\",\n  \"language\": \"Detected language name in English\",\n  \"suggested_department\": \"IT, Finance, Human Resources, Facilities, Operations, or Customer Support\",\n  \"short_summary\": \"One concise sentence of no more than 160 characters\"\n}\n\nUrgency rules:\n- Low: minor issue or general request with no meaningful blockage.\n- Medium: issue affects work but a workaround exists.\n- High: the requester cannot complete important work.\n- Critical: security incident, safety risk, widespread outage, or immediate severe business impact.\n\nChoose only one value for category, urgency, and suggested_department."
+            },
+            {
+              "content": "={{ 'Classify this service request.\\n\\nTitle: ' + $json.request_title + '\\nDetails: ' + $json.request_details }}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_schema",
+              "verbosity": "low",
+              "name": "service_request_classification",
+              "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"category\": {\n      \"type\": \"string\",\n      \"enum\": [\n        \"Access\",\n        \"Hardware\",\n        \"Software\",\n        \"Billing\",\n        \"HR\",\n        \"Facilities\",\n        \"Other\"\n      ]\n    },\n    \"urgency\": {\n      \"type\": \"string\",\n      \"enum\": [\n        \"Low\",\n        \"Medium\",\n        \"High\",\n        \"Critical\"\n      ]\n    },\n    \"language\": {\n      \"type\": \"string\"\n    },\n    \"suggested_department\": {\n      \"type\": \"string\",\n      \"enum\": [\n        \"IT\",\n        \"Finance\",\n        \"Human Resources\",\n        \"Facilities\",\n        \"Operations\",\n        \"Customer Support\"\n      ]\n    },\n    \"short_summary\": {\n      \"type\": \"string\"\n    }\n  },\n  \"required\": [\n    \"category\",\n    \"urgency\",\n    \"language\",\n    \"suggested_department\",\n    \"short_summary\"\n  ],\n  \"additionalProperties\": false\n}"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.3,
+      "position": [
+        32,
+        -528
+      ],
+      "id": "6c9f3d7b-6111-4564-9b2d-02beb817b116",
+      "name": "Classify Service Request",
+      "credentials": {
+        "openAiApi": {
+          "id": "REPLACE_WITH_OPENAI_CREDENTIAL_ID",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "964e8093-f2b4-4cae-8537-60f542a5b0cf",
+              "name": "requester_name",
+              "value": "={{ $('Prepare Request Data').item.json.requester_name }}",
+              "type": "string"
+            },
+            {
+              "id": "c157155b-98a0-4a7a-868f-4ea255ea8a23",
+              "name": "requester_email",
+              "value": "={{ $('Prepare Request Data').item.json.requester_email }}",
+              "type": "string"
+            },
+            {
+              "id": "b54dac61-1db6-47b2-ac87-1722b9b606dc",
+              "name": "request_title",
+              "value": "={{ $('Prepare Request Data').item.json.request_title }}",
+              "type": "string"
+            },
+            {
+              "id": "6b8e2d2e-ce6d-46c7-9d84-340eebdcba03",
+              "name": "=request_details",
+              "value": "={{ $('Prepare Request Data').item.json.request_details }}",
+              "type": "string"
+            },
+            {
+              "id": "51d5eab8-9f07-4470-bcef-78519a7447b6",
+              "name": "submitted_at",
+              "value": "={{ $('Prepare Request Data').item.json.submitted_at }}",
+              "type": "string"
+            },
+            {
+              "id": "4fc8237a-ce96-451f-99be-9258ce93d686",
+              "name": "category",
+              "value": "={{ $json.output[0].content[0].text.category }}",
+              "type": "string"
+            },
+            {
+              "id": "e9739ef2-6f0b-4916-bad9-61368017cf46",
+              "name": "urgency",
+              "value": "={{ $json.output[0].content[0].text.urgency }}",
+              "type": "string"
+            },
+            {
+              "id": "a5fb594d-7d8d-41aa-8099-8a6e54746d1d",
+              "name": "language",
+              "value": "={{ $json.output[0].content[0].text.language }}",
+              "type": "string"
+            },
+            {
+              "id": "4376e151-b7fa-4a60-83f4-b1a4ad2836a7",
+              "name": "suggested_department",
+              "value": "={{ $json.output[0].content[0].text.suggested_department }}",
+              "type": "string"
+            },
+            {
+              "id": "3f2dbf2c-4927-4198-aa0a-ce1de88bd76e",
+              "name": "short_summary",
+              "value": "={{ $json.output[0].content[0].text.short_summary }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        384,
+        -528
+      ],
+      "id": "7bb1fdb9-f8f2-4bfb-baea-b09c2ade4884",
+      "name": "Build Classified Request"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\nconst errors = [];\n\nconst requiredFields = [\n  'requester_name',\n  'requester_email',\n  'request_title',\n  'request_details',\n  'submitted_at',\n  'category',\n  'urgency',\n  'language',\n  'suggested_department',\n  'short_summary',\n];\n\nfor (const field of requiredFields) {\n  const value = data[field];\n\n  if (typeof value !== 'string' || value.trim() === '') {\n    errors.push(`${field} is required`);\n  }\n}\n\nconst allowedCategories = [\n  'Access',\n  'Hardware',\n  'Software',\n  'Billing',\n  'HR',\n  'Facilities',\n  'Other',\n];\n\nconst allowedUrgencies = [\n  'Low',\n  'Medium',\n  'High',\n  'Critical',\n];\n\nconst allowedDepartments = [\n  'IT',\n  'Finance',\n  'Human Resources',\n  'Facilities',\n  'Operations',\n  'Customer Support',\n];\n\nif (data.category && !allowedCategories.includes(data.category)) {\n  errors.push('category is invalid');\n}\n\nif (data.urgency && !allowedUrgencies.includes(data.urgency)) {\n  errors.push('urgency is invalid');\n}\n\nif (\n  data.suggested_department &&\n  !allowedDepartments.includes(data.suggested_department)\n) {\n  errors.push('suggested_department is invalid');\n}\n\nif (\n  typeof data.requester_email === 'string' &&\n  data.requester_email.trim() !== '' &&\n  !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(data.requester_email)\n) {\n  errors.push('requester_email is invalid');\n}\n\nif (\n  typeof data.short_summary === 'string' &&\n  data.short_summary.length > 160\n) {\n  errors.push('short_summary exceeds 160 characters');\n}\n\nreturn [\n  {\n    json: {\n      ...data,\n      validation_status: errors.length === 0 ? 'valid' : 'invalid',\n      validation_errors: errors,\n    },\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        608,
+        -528
+      ],
+      "id": "2623281e-4966-459e-b42c-151c656722b9",
+      "name": "Validate Classification Data"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "e1465f52-a689-4c37-b4f5-80c382175892",
+              "leftValue": "={{ $json.validation_status }}",
+              "rightValue": "valid",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        832,
+        -528
+      ],
+      "id": "4567ceae-2c0f-4dc7-9f88-c78296c3aa4b",
+      "name": "Is Classification Valid?"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/REPLACE_WITH_GOOGLE_SHEET_ID/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "requests",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/REPLACE_WITH_GOOGLE_SHEET_ID/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "submitted_at": "={{ $json.submitted_at }}",
+            "requester_name": "={{ $json.requester_name }}",
+            "requester_email": "={{ $json.requester_email }}",
+            "request_title": "={{ $json.request_title }}",
+            "request_details": "={{ $json.request_details }}",
+            "category": "={{ $json.category }}",
+            "urgency": "={{ $json.urgency }}",
+            "language": "={{ $json.language }}",
+            "suggested_department": "={{ $json.suggested_department }}",
+            "short_summary": "={{ $json.short_summary }}",
+            "validation_status": "={{ $json.validation_status }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "submitted_at",
+              "displayName": "submitted_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "requester_name",
+              "displayName": "requester_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "requester_email",
+              "displayName": "requester_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "request_title",
+              "displayName": "request_title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "request_details",
+              "displayName": "request_details",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "category",
+              "displayName": "category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "urgency",
+              "displayName": "urgency",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "language",
+              "displayName": "language",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "suggested_department",
+              "displayName": "suggested_department",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "short_summary",
+              "displayName": "short_summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "validation_status",
+              "displayName": "validation_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        992,
+        -688
+      ],
+      "id": "45d22450-98d1-4185-8a3e-d6c50248703c",
+      "name": "Save Classified Request",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_WITH_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "new-channel",
+          "mode": "name"
+        },
+        "text": "={{ '🤖 New classified service request\\n\\nTitle: ' + $json.request_title + '\\nCategory: ' + $json.category + '\\nUrgency: ' + $json.urgency + '\\nLanguage: ' + $json.language + '\\nDepartment: ' + $json.suggested_department + '\\nSummary: ' + $json.short_summary }}",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.7,
+      "position": [
+        1168,
+        -720
+      ],
+      "id": "a4b56a3c-0dd2-4762-ac73-060e041a6305",
+      "name": "Notify Service Team",
+      "webhookId": "2406115a-2709-49e0-89fd-8d6d56636878",
+      "credentials": {
+        "slackApi": {
+          "id": "REPLACE_WITH_SLACK_CREDENTIAL_ID",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"success\": false,\n  \"message\": \"The classification was incomplete and requires manual review.\"\n}",
+        "options": {
+          "responseCode": 422
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1056,
+        -432
+      ],
+      "id": "3e644743-2d16-44d5-9a6d-86a6b68e7688",
+      "name": "Return Validation Error"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Receive Service Request": {
+      "main": [
+        [
+          {
+            "node": "Prepare Request Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Request Data": {
+      "main": [
+        [
+          {
+            "node": "Classify Service Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Classify Service Request": {
+      "main": [
+        [
+          {
+            "node": "Build Classified Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Classified Request": {
+      "main": [
+        [
+          {
+            "node": "Validate Classification Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Classification Data": {
+      "main": [
+        [
+          {
+            "node": "Is Classification Valid?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Classification Valid?": {
+      "main": [
+        [
+          {
+            "node": "Save Classified Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Return Validation Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Classified Request": {
+      "main": [
+        [
+          {
+            "node": "Notify Service Team",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notify Service Team": {
+      "main": [
+        [
+          {
+            "node": "Return Form Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "timezone": "Atlantic/Canary",
+    "callerPolicy": "workflowsFromSameOwner",
+    "executionTimeout": -1,
+    "availableInMCP": false
+  },
+  "versionId": "8c3bc866-d027-497f-aae4-cb6ef69a3e59",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "353de91b73c515986131eb03af10a93fa04a2fb101bf2415d437f969efb9351f"
+  },
+  "nodeGroups": [],
+  "id": "Q11qy2NPZ3VN5rMN",
+  "tags": []
+}
