@@ -31,9 +31,11 @@ I am building real automation systems with Python, n8n, and Make. This repo is m
 - [x] Day 14: AI service request classifier
 - [x] Day 15: Make fundamentals
 - [x] Day 17: AI invoice processing, validation, approval, and Airtable
+- [x] Day 18: Invoice processing audit logs and failure handling
 
 ## 🚀 Recent n8n Projects
 
+- [Day 18 — Invoice Processing, Part 2](day-18-invoice-processing-part-2/README.md)
 - [Day 17 — Invoice Processing, Part 1](day-17-invoice-processing-part-1/README.md)
 - [Day 14 — AI Service Request Classifier](day-14-ai-service-request-classifier/README.md)
 - [Day 13 — Human Approval](day-13-human-approval/README.md)
@@ -53,4 +55,4 @@ I am building real automation systems with Python, n8n, and Make. This repo is m
 - LinkedIn: (add your link here)
 
 ---
-*Last update: Day 17*
+*Last update: Day 18*
