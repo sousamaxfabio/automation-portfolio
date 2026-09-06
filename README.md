@@ -32,6 +32,9 @@ I am building real automation systems with Python, n8n, and Make. This repo is m
 - [x] Day 15: Make fundamentals
 - [x] Day 17: AI invoice processing, validation, approval, and Airtable
 - [x] Day 18: Invoice processing audit logs and failure handling
+- [x] Day 14: AI service request classifier
+- [x] Day 15: Make fundamentals
+- [x] Day 17: AI invoice processing, validation, approval, and Airtable
 
 ## 🚀 Recent n8n Projects
 
