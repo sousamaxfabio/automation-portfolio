@@ -28,9 +28,14 @@ I am building real automation systems with Python, n8n, and Make. This repo is m
 - [x] Day 11: Webhooks and input validation
 - [x] Day 12: Scheduling, Google Sheets, Gmail, Slack, OpenAI, and Airtable
 - [x] Day 13: Human approval with Gmail and conditional routing
+- [x] Day 14: AI service request classifier
+- [x] Day 15: Make fundamentals
+- [x] Day 17: AI invoice processing, validation, approval, and Airtable
 
 ## 🚀 Recent n8n Projects
 
+- [Day 17 — Invoice Processing, Part 1](day-17-invoice-processing-part-1/README.md)
+- [Day 14 — AI Service Request Classifier](day-14-ai-service-request-classifier/README.md)
 - [Day 13 — Human Approval](day-13-human-approval/README.md)
 - [Day 12 — Scheduled Weather Check](day-12-scheduled-weather-check/README.md)
 - [Day 12 — Essential Integrations](day-12-essential-integrations/README.md)
@@ -48,4 +53,5 @@ I am building real automation systems with Python, n8n, and Make. This repo is m
 - LinkedIn: (add your link here)
 
 ---
-*Last update: Day 13*
+*Last update: Day 17*
+
