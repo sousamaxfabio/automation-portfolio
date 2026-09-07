@@ -338,7 +338,7 @@ https://github.com/n8n-io/n8n/issues/25359
 
 ## Demo
 
-Loom walkthrough: *coming soon — Day 20 final video*
+Video walkthrough: Pending — will be recorded in batch with other projects during final portfolio review phase.
 
 ## Skills demonstrated
 
