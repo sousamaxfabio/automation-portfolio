@@ -327,10 +327,18 @@ https://github.com/n8n-io/n8n/issues/25359
 
 ## Files
 
-- `README.md` — Day 19 implementation notes and test results
+- `README.md` — Day 19-20 implementation notes, architecture, and test results
 - `workflow.json` — sanitized export of `Invoice Processing — Test Upload`
 - `failure-notification-workflow.json` — sanitized export of `Invoice Processing - Failure Notification`
+- `sample-invoices/` — 3 fictional invoices for validation testing
+    - `valid-invoice-N8N-20260907-7F3C9A.pdf` — valid invoice for success path
+    - `missing-deadline-N8N-MISSING-20260907-3C8D.pdf` — missing payment deadline test
+    - `incorrect-document-meeting-notes.pdf` — non-invoice document for validation failure test
 - `screenshots/` — workflow and execution evidence
+
+## Demo
+
+Loom walkthrough: *coming soon — Day 20 final video*
 
 ## Skills demonstrated
 
