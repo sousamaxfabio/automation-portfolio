@@ -20,22 +20,20 @@ I am building real automation systems with Python, n8n, and Make. This repo is m
 
 ## ✅ Progress Tracker
 
-- [x] Days 1–4: Git, GitHub, and repository foundations
-- [x] Day 5: API fundamentals
-- [x] Day 6: Python mini integration
-- [x] Day 9: n8n data mapping and live weather API
-- [x] Day 10: n8n data and expressions
-- [x] Day 11: Webhooks and input validation
-- [x] Day 12: Scheduling, Google Sheets, Gmail, Slack, OpenAI, and Airtable
-- [x] Day 13: Human approval with Gmail and conditional routing
-- [x] Day 14: AI service request classifier
-- [x] Day 15: Make fundamentals
-- [x] Day 17: AI invoice processing, validation, approval, and Airtable
-- [x] Day 18: Invoice processing audit logs and failure handling
-- [x] Day 19: Invoice production hardening, notifications, and validation testing
-- [x] Day 14: AI service request classifier
-- [x] Day 15: Make fundamentals
-- [x] Day 17: AI invoice processing, validation, approval, and Airtable
+- Days 1–4: Git, GitHub, and repository foundations
+- Day 5: API fundamentals
+- Day 6: Python mini integration
+- Day 9: n8n data mapping and live weather API
+- Day 10: n8n data and expressions
+- Day 11: Webhooks and input validation
+- Day 12: Scheduling, Google Sheets, Gmail, Slack, OpenAI, and Airtable
+- Day 13: Human approval with Gmail and conditional routing
+- Day 14: AI service request classifier
+- Day 15: Make fundamentals
+- Day 17: AI invoice processing, validation, approval, and Airtable
+- Day 18: Invoice processing audit logs and failure handling
+- Day 19: Invoice production hardening, notifications, and validation testing
+- Day 20: Publish Project 2 — Invoice Processing final docs and sample invoices
 
 ## 🚀 Recent n8n Projects
 
@@ -60,4 +58,4 @@ I am building real automation systems with Python, n8n, and Make. This repo is m
 - LinkedIn: (add your link here)
 
 ---
-*Last update: Day 19*
+*Last update: Day 20*
