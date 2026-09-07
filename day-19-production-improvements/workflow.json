@@ -1,0 +1,1424 @@
+{
+  "name": "Invoice Processing — Test Upload",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Upload an invoice",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Invoice File",
+              "fieldType": "file",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.6,
+      "position": [
+        -784,
+        -448
+      ],
+      "id": "ecb6107b-2b0e-45eb-be6a-a990affa29e2",
+      "name": "Upload an invoice",
+      "webhookId": "ca4bfaef-a507-461d-8e8f-f39e6d7c4ee0"
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "binaryPropertyName": "Invoice_File",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        -608,
+        -304
+      ],
+      "id": "8eb925d6-067f-4f52-8447-4c511bb8d80e",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "text": "={{ $json.text }}",
+        "attributes": {
+          "attributes": [
+            {
+              "name": "supplier",
+              "description": "Supplier or vendor name exactly as written on the invoice. Do not guess."
+            },
+            {
+              "name": "invoice_number",
+              "description": "Invoice identifier exactly as written. Preserve letters, hyphens, slashes and leading zeros."
+            },
+            {
+              "name": "invoice_date",
+              "description": "Invoice issue date in YYYY-MM-DD format. Do not guess."
+            },
+            {
+              "name": "subtotal",
+              "type": "number",
+              "description": "Subtotal before VAT or tax. Return only the numeric amount without a currency symbol."
+            },
+            {
+              "name": "vat",
+              "type": "number",
+              "description": "VAT or tax amount. Return only the numeric amount without a currency symbol."
+            },
+            {
+              "name": "total",
+              "type": "number",
+              "description": "Final invoice total including VAT or tax. Return only the numeric amount without a currency symbol."
+            },
+            {
+              "name": "currency",
+              "description": "Three-letter currency code such as GBP, EUR or USD"
+            },
+            {
+              "name": "payment_deadline",
+              "description": "Payment due date in YYYY-MM-DD format. If the invoice only gives payment terms, calculate the date from the invoice date."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+      "typeVersion": 1.2,
+      "position": [
+        -608,
+        -48
+      ],
+      "id": "2b85e604-5b91-4647-b826-673ddb6a1752",
+      "name": "Information Extractor",
+      "retryOnFail": true,
+      "waitBetweenTries": 3000
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -576,
+        176
+      ],
+      "id": "6b3ebf53-b6d1-4dd2-85df-e97e7d668ebf",
+      "name": "OpenAI Chat Model"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $json.output ?? $json;\nconst issues = [];\n\nconst requiredFields = [\n  'supplier',\n  'invoice_number',\n  'invoice_date',\n  'subtotal',\n  'vat',\n  'total',\n  'currency',\n  'payment_deadline',\n];\n\nconst isMissing = (value) =>\n  value === undefined ||\n  value === null ||\n  (typeof value === 'string' && value.trim() === '');\n\nfor (const field of requiredFields) {\n  if (isMissing(data[field])) {\n    issues.push(`${field} is missing`);\n  }\n}\n\nfor (const field of ['subtotal', 'vat', 'total']) {\n  if (!isMissing(data[field])) {\n    const value = Number(data[field]);\n\n    if (!Number.isFinite(value) || value < 0) {\n      issues.push(`${field} must be a non-negative number`);\n    }\n  }\n}\n\nconst isValidDate = (value) => {\n  if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(value ?? '')) return false;\n\n  const [year, month, day] = value.split('-').map(Number);\n  const date = new Date(Date.UTC(year, month - 1, day));\n\n  return (\n    date.getUTCFullYear() === year &&\n    date.getUTCMonth() === month - 1 &&\n    date.getUTCDate() === day\n  );\n};\n\nif (!isMissing(data.invoice_date) && !isValidDate(data.invoice_date)) {\n  issues.push('invoice_date must use YYYY-MM-DD');\n}\n\nif (\n  !isMissing(data.payment_deadline) &&\n  !isValidDate(data.payment_deadline)\n) {\n  issues.push('payment_deadline must use YYYY-MM-DD');\n}\n\nif (\n  isValidDate(data.invoice_date) &&\n  isValidDate(data.payment_deadline) &&\n  data.payment_deadline < data.invoice_date\n) {\n  issues.push('payment_deadline cannot be before invoice_date');\n}\n\nconst subtotal = Number(data.subtotal);\nconst vat = Number(data.vat);\nconst total = Number(data.total);\n\nif (\n  Number.isFinite(subtotal) &&\n  Number.isFinite(vat) &&\n  Number.isFinite(total) &&\n  Math.abs(subtotal + vat - total) > 0.02\n) {\n  issues.push('subtotal plus VAT does not equal total');\n}\n\nconst currency = String(data.currency ?? '').trim().toUpperCase();\n\nif (currency && !/^[A-Z]{3}$/.test(currency)) {\n  issues.push('currency must be a three-letter code');\n}\n\nreturn {\n  json: {\n    ...data,\n    currency,\n    validation_passed: issues.length === 0,\n    validation_issues: issues.join('; '),\n    status: issues.length === 0\n      ? 'Pending review'\n      : 'Validation failed',\n  },\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -416,
+        112
+      ],
+      "id": "86fb1dd9-dbf9-4068-9b8a-669f54972c6f",
+      "name": "Validate Invoice"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "255e243f-6d7a-45bb-a557-7bacc17a2620",
+              "leftValue": "={{ $json.validation_passed }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -336,
+        304
+      ],
+      "id": "d0801fd8-131d-48d0-ba30-0b332e504c1c",
+      "name": "Validation Passed?"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "34211a4d-b5bd-4655-8d83-3a996cdcdbe5",
+              "leftValue": "={{ $json['Approval Decision'] }}",
+              "rightValue": "Approve",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        32,
+        0
+      ],
+      "id": "da5b3e84-97eb-489e-ab2f-a3afd7e1fbce",
+      "name": "Invoice Approved?"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "app3uImQnTJw0m6nl",
+          "mode": "list",
+          "cachedResultName": "Invoice Processing",
+          "cachedResultUrl": "https://airtable.com/app3uImQnTJw0m6nl"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblsiR9U3050jKJAc",
+          "mode": "list",
+          "cachedResultName": "Invoices",
+          "cachedResultUrl": "https://airtable.com/app3uImQnTJw0m6nl/tblsiR9U3050jKJAc"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Supplier": "={{ $('Validate Invoice').item.json.supplier }}",
+            "Invoice Date": "={{ $('Validate Invoice').item.json.invoice_date.trim() }}",
+            "Invoice Number": "={{ $('Validate Invoice').item.json.invoice_number }}",
+            "Subtotal": "={{ $('Validate Invoice').item.json.subtotal }}",
+            "VAT": "={{ $('Validate Invoice').item.json.vat }}",
+            "Currency": "={{ $('Validate Invoice').item.json.currency }}",
+            "Total": "={{ $('Validate Invoice').item.json.total }}",
+            "Payment Deadline": "={{ $('Validate Invoice').item.json.payment_deadline }}",
+            "Status": "Approved",
+            "Validation Issues": "={{ $('Validate Invoice').item.json.validation_issues }}",
+            "Approved at": "={{ $('Review Invoice').item.json.submittedAt }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Supplier",
+              "displayName": "Supplier",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Invoice Number",
+              "displayName": "Invoice Number",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Invoice Date",
+              "displayName": "Invoice Date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Subtotal",
+              "displayName": "Subtotal",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "VAT",
+              "displayName": "VAT",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Total",
+              "displayName": "Total",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Currency",
+              "displayName": "Currency",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "GBP",
+                  "value": "GBP"
+                },
+                {
+                  "name": "EUR",
+                  "value": "EUR"
+                },
+                {
+                  "name": "USD",
+                  "value": "USD"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Payment Deadline",
+              "displayName": "Payment Deadline",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Source File",
+              "displayName": "Source File",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Pending review",
+                  "value": "Pending review"
+                },
+                {
+                  "name": "Approved",
+                  "value": "Approved"
+                },
+                {
+                  "name": "Rejected",
+                  "value": "Rejected"
+                },
+                {
+                  "name": "Validation failed",
+                  "value": "Validation failed"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Validation Issues",
+              "displayName": "Validation Issues",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Approved by",
+              "displayName": "Approved by",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Approved at",
+              "displayName": "Approved at",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "typecast": true
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        640,
+        -48
+      ],
+      "id": "1bd8efac-98f1-4707-9310-fff1ab3f577c",
+      "name": "Create a record",
+      "retryOnFail": true,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "Invoice rejected",
+        "completionMessage": "You rejected this invoice. No record was created in Airtable.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        432,
+        208
+      ],
+      "id": "47464932-7d7c-4df9-bc9e-e203e1ebbced",
+      "name": "Invoice Rejected",
+      "webhookId": "77e2f7b4-e076-4ada-9a0b-32f0b860108e"
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "Invoice saved",
+        "completionMessage": "You approved this invoice. It has been saved to Airtable.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        1248,
+        16
+      ],
+      "id": "ae6bd01a-3323-4d37-8e10-1c09784997f9",
+      "name": "Invoice saved",
+      "webhookId": "905b3974-dbee-4232-b4b4-3fa32b4f573c"
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "Invoice needs correction",
+        "completionMessage": "={{ $('Validate Invoice').item.json.validation_issues }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        0,
+        560
+      ],
+      "id": "b84107e7-6beb-4759-9441-e78ad9dbe787",
+      "name": "Validation Failed",
+      "webhookId": "fe6dbff7-8a69-49a8-9f0e-4f2ccc323dd9"
+    },
+    {
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldType": "html",
+              "html": "<h2>Review invoice</h2>\n<p>Check these details against the original invoice before approving.</p>\n\n<p><strong>Supplier:</strong> {{ $json.supplier }}</p>\n<p><strong>Invoice number:</strong> {{ $json.invoice_number }}</p>\n<p><strong>Invoice date:</strong> {{ $json.invoice_date }}</p>\n<p><strong>Subtotal:</strong> {{ $json.subtotal }}</p>\n<p><strong>VAT:</strong> {{ $json.vat }}</p>\n<p><strong>Total:</strong> {{ $json.total }}</p>\n<p><strong>Currency:</strong> {{ $json.currency }}</p>\n<p><strong>Payment deadline:</strong> {{ $json.payment_deadline }}</p>"
+            },
+            {
+              "fieldLabel": "Approval Decision",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Approve"
+                  },
+                  {
+                    "option": "Reject"
+                  }
+                ]
+              },
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        -160,
+        176
+      ],
+      "id": "a262b0f7-ac1d-4d64-a9ef-0173e607f23d",
+      "name": "Review Invoice",
+      "webhookId": "00024572-f189-48cf-9dde-42e48ec3c45d"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "app3uImQnTJw0m6nl",
+          "mode": "list",
+          "cachedResultName": "Invoice Processing",
+          "cachedResultUrl": "https://airtable.com/app3uImQnTJw0m6nl"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblsiR9U3050jKJAc",
+          "mode": "list",
+          "cachedResultName": "Invoices",
+          "cachedResultUrl": "https://airtable.com/app3uImQnTJw0m6nl/tblsiR9U3050jKJAc"
+        },
+        "filterByFormula": "={{ 'AND({Supplier}=' + JSON.stringify($('Validate Invoice').item.json.supplier) + ',{Invoice Number}=' + JSON.stringify($('Validate Invoice').item.json.invoice_number) + ')' }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        256,
+        -96
+      ],
+      "id": "53467fd3-2346-43ea-b44a-51778a02218b",
+      "name": "Find Existing Invoice",
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "479e33bf-d76e-45aa-acd0-773edc72bc7b",
+              "leftValue": "={{ $json.id ?? '' }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        448,
+        -160
+      ],
+      "id": "16359fa5-b5ed-4fad-b183-f498d30d1861",
+      "name": "Duplicate Found?"
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "Invoice already exists",
+        "completionMessage": "An invoice with this supplier and invoice number already exists in Airtable. No new record was created.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        832,
+        -272
+      ],
+      "id": "a669cd89-61af-4094-97d0-566211dc434e",
+      "name": "Duplicate Invoice",
+      "webhookId": "2d4de884-fdee-4106-acf1-0571d399f963"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "app3uImQnTJw0m6nl",
+          "mode": "list",
+          "cachedResultName": "Invoice Processing",
+          "cachedResultUrl": "https://airtable.com/app3uImQnTJw0m6nl"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblOz6EikeSrphFL1",
+          "mode": "list",
+          "cachedResultName": "Execution Logs",
+          "cachedResultUrl": "https://airtable.com/app3uImQnTJw0m6nl/tblOz6EikeSrphFL1"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Execution ID": "={{ $execution.id }}",
+            "Outcome": "successful",
+            "Timestamp": "={{ $now.toISO() }}",
+            "Invoice Number": "={{ $('Validate Invoice').item.json.invoice_number }}",
+            "Supplier": "={{ $('Validate Invoice').item.json.supplier }}",
+            "Details": "Invoice successfully saved to Airtable",
+            "Status": "Done"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Execution ID",
+              "displayName": "Execution ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Outcome",
+              "displayName": "Outcome",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "successful",
+                  "value": "successful"
+                },
+                {
+                  "name": "failed",
+                  "value": "failed"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Todo",
+                  "value": "Todo"
+                },
+                {
+                  "name": "In progress",
+                  "value": "In progress"
+                },
+                {
+                  "name": "Done",
+                  "value": "Done"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Invoice Number",
+              "displayName": "Invoice Number",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Supplier",
+              "displayName": "Supplier",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Details",
+              "displayName": "Details",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "typecast": true
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        832,
+        -48
+      ],
+      "id": "ab27b40a-12ca-47a1-a07b-a59b46262355",
+      "name": "Log Successful Execution",
+      "retryOnFail": true,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "app3uImQnTJw0m6nl",
+          "mode": "list",
+          "cachedResultName": "Invoice Processing",
+          "cachedResultUrl": "https://airtable.com/app3uImQnTJw0m6nl"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblOz6EikeSrphFL1",
+          "mode": "list",
+          "cachedResultName": "Execution Logs",
+          "cachedResultUrl": "https://airtable.com/app3uImQnTJw0m6nl/tblOz6EikeSrphFL1"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Execution ID": "={{ $execution.id }}",
+            "Outcome": "failed",
+            "Timestamp": "={{ $now.toISO() }}",
+            "Status": "Done",
+            "Invoice Number": "={{ $json.invoice_number || 'Unknown' }}",
+            "Supplier": "={{ $json.supplier || 'Unknown' }}",
+            "Details": "={{ $json.validation_issues || 'Invoice validation failed' }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Execution ID",
+              "displayName": "Execution ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Outcome",
+              "displayName": "Outcome",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "successful",
+                  "value": "successful"
+                },
+                {
+                  "name": "failed",
+                  "value": "failed"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Todo",
+                  "value": "Todo"
+                },
+                {
+                  "name": "In progress",
+                  "value": "In progress"
+                },
+                {
+                  "name": "Done",
+                  "value": "Done"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Invoice Number",
+              "displayName": "Invoice Number",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Supplier",
+              "displayName": "Supplier",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Details",
+              "displayName": "Details",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "typecast": true
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -160,
+        416
+      ],
+      "id": "8ca624ba-5eaa-4b23-86bc-a1644e099a12",
+      "name": "Log Validation Failure",
+      "retryOnFail": true,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "app3uImQnTJw0m6nl",
+          "mode": "list",
+          "cachedResultName": "Invoice Processing",
+          "cachedResultUrl": "https://airtable.com/app3uImQnTJw0m6nl"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblOz6EikeSrphFL1",
+          "mode": "list",
+          "cachedResultName": "Execution Logs",
+          "cachedResultUrl": "https://airtable.com/app3uImQnTJw0m6nl/tblOz6EikeSrphFL1"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Execution ID": "={{ $execution.id }}",
+            "Outcome": "failed",
+            "Timestamp": "={{ $now.toISO() }}",
+            "Status": "Done",
+            "Invoice Number": "={{ $('Validate Invoice').item.json.invoice_number || 'Unknown' }}",
+            "Supplier": "={{ $('Validate Invoice').item.json.supplier || 'Unknown' }}",
+            "Details": "Invoice rejected during manual review"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Execution ID",
+              "displayName": "Execution ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Outcome",
+              "displayName": "Outcome",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "successful",
+                  "value": "successful"
+                },
+                {
+                  "name": "failed",
+                  "value": "failed"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Todo",
+                  "value": "Todo"
+                },
+                {
+                  "name": "In progress",
+                  "value": "In progress"
+                },
+                {
+                  "name": "Done",
+                  "value": "Done"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Invoice Number",
+              "displayName": "Invoice Number",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Supplier",
+              "displayName": "Supplier",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Details",
+              "displayName": "Details",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "typecast": true
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        256,
+        112
+      ],
+      "id": "b0a0e97d-bec7-4839-bc50-2ba8e26342fb",
+      "name": "Log Approval Rejection",
+      "retryOnFail": true,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "app3uImQnTJw0m6nl",
+          "mode": "list",
+          "cachedResultName": "Invoice Processing",
+          "cachedResultUrl": "https://airtable.com/app3uImQnTJw0m6nl"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblOz6EikeSrphFL1",
+          "mode": "list",
+          "cachedResultName": "Execution Logs",
+          "cachedResultUrl": "https://airtable.com/app3uImQnTJw0m6nl/tblOz6EikeSrphFL1"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Execution ID": "={{ $execution.id }}",
+            "Outcome": "failed",
+            "Timestamp": "={{ $now.toISO() }}",
+            "Status": "Done",
+            "Invoice Number": "={{ $('Validate Invoice').item.json.invoice_number || 'Unknown' }}",
+            "Supplier": "={{ $('Validate Invoice').item.json.supplier || 'Unknown' }}",
+            "Details": "Duplicate invoice detected; no new invoice record was created"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Execution ID",
+              "displayName": "Execution ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Outcome",
+              "displayName": "Outcome",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "successful",
+                  "value": "successful"
+                },
+                {
+                  "name": "failed",
+                  "value": "failed"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Todo",
+                  "value": "Todo"
+                },
+                {
+                  "name": "In progress",
+                  "value": "In progress"
+                },
+                {
+                  "name": "Done",
+                  "value": "Done"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Invoice Number",
+              "displayName": "Invoice Number",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Supplier",
+              "displayName": "Supplier",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Details",
+              "displayName": "Details",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "typecast": true
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        640,
+        -272
+      ],
+      "id": "90252019-5031-4713-b119-38a125f39f23",
+      "name": "Log Duplicate Invoice",
+      "retryOnFail": true,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "sendTo": "YOUR_EMAIL@example.com",
+        "subject": "Invoice processed successfully",
+        "message": "=Invoice: {{ $('Information Extractor').item.json.output.invoice_number }}\nSupplier: {{ $('Information Extractor').item.json.output.supplier }}\nTotal: {{ $('Information Extractor').item.json.output.total }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1056,
+        -48
+      ],
+      "id": "7d4f3668-76e5-4ad5-89f7-84cc71db185f",
+      "name": "Send a message",
+      "webhookId": "051eb09a-f281-4f4e-9701-d4957789d59e"
+    }
+  ],
+  "connections": {
+    "Upload an invoice": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Information Extractor": {
+      "main": [
+        [
+          {
+            "node": "Validate Invoice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Invoice": {
+      "main": [
+        [
+          {
+            "node": "Validation Passed?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validation Passed?": {
+      "main": [
+        [
+          {
+            "node": "Review Invoice",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Validation Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Invoice Approved?": {
+      "main": [
+        [
+          {
+            "node": "Find Existing Invoice",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Approval Rejection",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a record": {
+      "main": [
+        [
+          {
+            "node": "Log Successful Execution",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Review Invoice": {
+      "main": [
+        [
+          {
+            "node": "Invoice Approved?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Existing Invoice": {
+      "main": [
+        [
+          {
+            "node": "Duplicate Found?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Duplicate Found?": {
+      "main": [
+        [
+          {
+            "node": "Log Duplicate Invoice",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create a record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Successful Execution": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Validation Failure": {
+      "main": [
+        [
+          {
+            "node": "Validation Failed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Approval Rejection": {
+      "main": [
+        [
+          {
+            "node": "Invoice Rejected",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Duplicate Invoice": {
+      "main": [
+        [
+          {
+            "node": "Duplicate Invoice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Invoice saved",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "nodeGroups": [],
+  "tags": []
+}
