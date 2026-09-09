@@ -57,5 +57,9 @@ I am building real automation systems with Python, n8n, and Make. This repo is m
 - GitHub: [@sousamaxfabio](https://github.com/sousamaxfabio)
 - LinkedIn: (add your link here)
 
----
-*Last update: Day 20*
+### Project 3 — Part 2 (Day 26) — Production Refactor
+- Refactored Day 25 prototype into 6 functions
+- Added `validate_row()` → filtered 2 invalid rows (id=11 missing name, id=12 missing description)
+- Added retry logic (3x) + structured logging to `app.log`
+- Result: `results.csv` → 16 classified with category + confidence
+- Tech: `openai`, `python-dotenv`, logging
