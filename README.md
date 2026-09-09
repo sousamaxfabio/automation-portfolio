@@ -6,17 +6,21 @@
 ![GitHub repo size](https://img.shields.io/github/repo-size/sousamaxfabio/automation-portfolio)
 
 ## 📌 About Me
-I am building real automation systems with Python, n8n, and Make. This repo is my public lab.
 
-**Current Focus:** n8n Automations + API Integrations
+I am building practical automation and integration projects using Python, n8n, Make, APIs, and AI services.
+
+**Current Focus:** Workflow Automation, API Integrations, Python Automation, and AI-Powered Workflows
+
 **Location:** Canary Islands, Spain
-**Goal:** Junior Automation Engineer role
+
+**Target Roles:** Junior Automation Engineer, Workflow Automation, Integration, and AI Operations
 
 ## 🗂️ Portfolio Structure
-- `projects/` — Full case studies
-- `python-automations/` — Python scripts
-- `n8n-workflows/` — n8n JSON exports
-- `docs/` — Notes and learning docs
+
+- `day-*` — n8n and workflow automation projects
+- `python-automations/` — Python automation projects
+- `docs/` — Learning notes and reference material
+- `projects/` — Featured case studies and polished portfolio projects
 
 ## ✅ Progress Tracker
 
@@ -33,33 +37,53 @@ I am building real automation systems with Python, n8n, and Make. This repo is m
 - Day 17: AI invoice processing, validation, approval, and Airtable
 - Day 18: Invoice processing audit logs and failure handling
 - Day 19: Invoice production hardening, notifications, and validation testing
-- Day 20: Publish Project 2 — Invoice Processing final docs and sample invoices
+- Day 20: Published Invoice Processing project
+- Day 22: Python fundamentals
+- Day 23: Python + Airtable integration
+- Day 24: Python API integration
+- Day 25: Project 3 — AI CSV classification prototype
+- Day 26: Project 3 — production refactor with validation, retries, and logging
 
-## 🚀 Recent n8n Projects
+## 🚀 Featured Automation Projects
 
-- [Day 19 — Invoice Processing Production Improvements](day-19-production-improvements/README.md)
-- [Day 18 — Invoice Processing, Part 2](day-18-invoice-processing-part-2/README.md)
-- [Day 17 — Invoice Processing, Part 1](day-17-invoice-processing-part-1/README.md)
-- [Day 14 — AI Service Request Classifier](day-14-ai-service-request-classifier/README.md)
-- [Day 13 — Human Approval](day-13-human-approval/README.md)
-- [Day 12 — Scheduled Weather Check](day-12-scheduled-weather-check/README.md)
-- [Day 12 — Essential Integrations](day-12-essential-integrations/README.md)
-- [Day 11 — Webhook Practice](day-11-webhook-practice/README.md)
-- [Day 10 — Data and Expressions](day-10-data-and-expressions/README.md)
-- [Day 9 — Live Weather Check](day-9-live-weather-check/README.md)
+- [AI Service Request Classifier](day-14-ai-service-request-classifier/README.md)
+- [Intelligent Invoice Processing Automation](day-19-production-improvements/README.md)
+- [Python AI CSV Classification Pipeline](python-automations/day-26-project3-part2/)
+
+### Additional Workflow Practice
+
+- [Human Approval Workflow](day-13-human-approval/README.md)
+- [Scheduled Weather Check](day-12-scheduled-weather-check/README.md)
+- [Essential Integrations](day-12-essential-integrations/README.md)
+- [Webhook Practice](day-11-webhook-practice/README.md)
+- [Data and Expressions](day-10-data-and-expressions/README.md)
+- [Live Weather Check](day-9-live-weather-check/README.md)
 
 ## 🛠️ Tech Stack
+
 - **Languages:** Python, Markdown
-- **Tools:** Git, GitHub, VS Code, Docker
-- **Platforms:** n8n, Google Cloud, Gmail, Google Sheets, Slack, OpenAI, Airtable
+- **Automation:** n8n, Make
+- **APIs & AI:** OpenAI API, REST APIs, Webhooks, JSON
+- **Integrations:** Airtable, Gmail, Google Sheets, Slack
+- **Tools:** Git, GitHub, VS Code
 
 ## 📫 How to Reach Me
-- GitHub: [@sousamaxfabio](https://github.com/sousamaxfabio)
-- LinkedIn: (add your link here)
 
-### Project 3 — Part 2 (Day 26) — Production Refactor
-- Refactored Day 25 prototype into 6 functions
-- Added `validate_row()` → filtered 2 invalid rows (id=11 missing name, id=12 missing description)
-- Added retry logic (3x) + structured logging to `app.log`
-- Result: `results.csv` → 16 classified with category + confidence
-- Tech: `openai`, `python-dotenv`, logging
+- GitHub: [@sousamaxfabio](https://github.com/sousamaxfabio)
+
+## 🐍 Project 3 — AI CSV Classification Pipeline
+
+Built a Python automation pipeline that reads structured CSV data, validates required fields, classifies products using the OpenAI API, and writes the results to a new CSV file.
+
+### Key Features
+
+- CSV input validation
+- OpenAI API classification
+- Confidence scores
+- Retry handling
+- Structured logging
+- Error handling
+- Environment variables for API credentials
+- CSV output generation
+
+**Tech:** Python, OpenAI API, `python-dotenv`, CSV, logging
