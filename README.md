@@ -1,88 +1,88 @@
-# 🤖 Automation Portfolio — Fabio Sousa
+# 🤖 AI Automation & Integration Portfolio — Fabio Sousa
 
-> Documenting my journey to become an Automation Engineer — Week by Week
+Practical automation projects built with n8n, Make, Python, APIs, and AI services.
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/sousamaxfabio/automation-portfolio)
 ![GitHub repo size](https://img.shields.io/github/repo-size/sousamaxfabio/automation-portfolio)
 
 ## 📌 About Me
 
-I am building practical automation and integration projects using Python, n8n, Make, APIs, and AI services.
+I am developing practical automation and integration solutions using Python, n8n, Make, REST APIs, webhooks, and AI services.
 
-**Current Focus:** Workflow Automation, API Integrations, Python Automation, and AI-Powered Workflows
+My projects focus on building reliable workflows that receive and transform data, connect external services, validate information, handle errors, and automate repetitive business processes.
 
 **Location:** Canary Islands, Spain
 
-**Target Roles:** Junior Automation Engineer, Workflow Automation, Integration, and AI Operations
+**Target Roles:** Junior Automation Engineer, Workflow Automation Specialist, Integration Specialist, AI Automation, and AI Operations
 
-## 🗂️ Portfolio Structure
+## 🚀 Featured Projects
 
-- `day-*` — n8n and workflow automation projects
-- `python-automations/` — Python automation projects
-- `docs/` — Learning notes and reference material
+### AI Service Request Classifier
 
-## ✅ Progress Tracker
+An n8n workflow that receives service requests through a webhook, uses OpenAI to classify them, validates the AI output, stores valid requests in Google Sheets, and notifies a service team through Slack.
 
-- Days 1–4: Git, GitHub, and repository foundations
-- Day 5: API fundamentals
-- Day 6: Python mini integration
-- Day 9: n8n data mapping and live weather API
-- Day 10: n8n data and expressions
-- Day 11: Webhooks and input validation
-- Day 12: Scheduling, Google Sheets, Gmail, Slack, OpenAI, and Airtable
-- Day 13: Human approval with Gmail and conditional routing
-- Day 14: AI service request classifier
-- Day 15: Make fundamentals
-- Day 17: AI invoice processing, validation, approval, and Airtable
-- Day 18: Invoice processing audit logs and failure handling
-- Day 19: Invoice production hardening, notifications, and validation testing
-- Day 20: Published Invoice Processing project
-- Day 22: Python fundamentals
-- Day 23: Python + Airtable integration
-- Day 24: Python API integration
-- Day 25: Project 3 — AI CSV classification prototype
-- Day 26: Project 3 — production refactor with validation, retries, and logging
+**Skills:** n8n, OpenAI, Webhooks, JSON, Google Sheets, Slack, validation, conditional routing
 
-## 🚀 Featured Automation Projects
+[View Project](day-14-ai-service-request-classifier/README.md)
 
-- [AI Service Request Classifier](day-14-ai-service-request-classifier/README.md)
-- [Intelligent Invoice Processing Automation](day-19-production-improvements/README.md)
-- [Python AI CSV Classification Pipeline](python-automations/day-26-project3-part2/)
+---
 
-### Additional Workflow Practice
+### Intelligent Invoice Processing Automation
 
-- [Human Approval Workflow](day-13-human-approval/README.md)
-- [Scheduled Weather Check](day-12-scheduled-weather-check/README.md)
-- [Essential Integrations](day-12-essential-integrations/README.md)
-- [Webhook Practice](day-11-webhook-practice/README.md)
-- [Data and Expressions](day-10-data-and-expressions/README.md)
-- [Live Weather Check](day-9-live-weather-check/README.md)
+An n8n-based invoice processing workflow with AI-powered information extraction, validation, human approval, duplicate detection, Airtable logging, retry handling, and success and failure notifications.
 
-## 🛠️ Tech Stack
+**Skills:** n8n, OpenAI, Airtable, Gmail, validation, human approval, error workflows, retries
+
+[View Project](day-19-production-improvements/README.md)
+
+---
+
+### AI CSV Classification Pipeline
+
+A Python automation pipeline that reads CSV data, validates required fields, classifies products using the OpenAI API, handles retries and errors, and writes structured results to a new CSV file.
+
+**Skills:** Python, OpenAI API, CSV processing, validation, logging, retry handling, environment variables
+
+[View Project](python-automations/day-26-project3-part2/README.md)
+
+## 🔧 Additional Automation Projects
+
+- [Service Request API](service-request-api/README.md) — REST-style webhook API with validation, urgency routing, timestamps, and HTTP responses
+- [Human Approval Workflow](day-13-human-approval/README.md) — Gmail-based human approval and conditional routing
+- [Essential Integrations](day-12-essential-integrations/README.md) — Gmail, Slack, OpenAI, and Airtable integrations
+- [Scheduled Weather Check](day-12-scheduled-weather-check/README.md) — scheduled API automation
+- [Webhook Practice](day-11-webhook-practice/README.md) — webhook input and response handling
+- [Data and Expressions](day-10-data-and-expressions/README.md) — n8n data mapping and expressions
+- [Live Weather Check](day-9-live-weather-check/README.md) — live API integration
+
+## 🛠️ Technical Skills
 
 - **Languages:** Python, Markdown
-- **Automation:** n8n, Make
+- **Automation Platforms:** n8n, Make
 - **APIs & AI:** OpenAI API, REST APIs, Webhooks, JSON
 - **Integrations:** Airtable, Gmail, Google Sheets, Slack
-- **Tools:** Git, GitHub, VS Code
+- **Development Tools:** Git, GitHub, VS Code
+- **Workflow Skills:** Data mapping, validation, conditional routing, retry handling, error handling, logging, human approval flows
 
-## 📫 How to Reach Me
+## 📚 Learning Progress
+
+Completed practical work includes:
+
+- Git and GitHub fundamentals
+- API and webhook fundamentals
+- n8n workflow development
+- n8n expressions and data transformation
+- External service integrations
+- Human approval workflows
+- AI-powered classification
+- Invoice-processing automation
+- Make fundamentals
+- Python fundamentals
+- Python API integration
+- Python automation with validation, retries, and logging
+
+Further projects and skills are being added as the portfolio develops.
+
+## 📫 Contact
 
 - GitHub: [@sousamaxfabio](https://github.com/sousamaxfabio)
-
-## 🐍 Project 3 — AI CSV Classification Pipeline
-
-Built a Python automation pipeline that reads structured CSV data, validates required fields, classifies products using the OpenAI API, and writes the results to a new CSV file.
-
-### Key Features
-
-- CSV input validation
-- OpenAI API classification
-- Confidence scores
-- Retry handling
-- Structured logging
-- Error handling
-- Environment variables for API credentials
-- CSV output generation
-
-**Tech:** Python, OpenAI API, `python-dotenv`, CSV, logging
