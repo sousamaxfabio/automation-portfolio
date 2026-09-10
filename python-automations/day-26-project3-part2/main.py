@@ -24,7 +24,6 @@ def get_client():
     if not api_key:
         logging.error("OPENAI_API_KEY not found in.env")
         raise ValueError("Missing OPENAI_API_KEY")
-    print(f"Using Key: {api_key[:8]}... (from.env)")
     logging.info("OpenAI client ready")
     return OpenAI(api_key=api_key)
 
