@@ -20,7 +20,6 @@ I am building practical automation and integration projects using Python, n8n, M
 - `day-*` — n8n and workflow automation projects
 - `python-automations/` — Python automation projects
 - `docs/` — Learning notes and reference material
-- `projects/` — Featured case studies and polished portfolio projects
 
 ## ✅ Progress Tracker
 
