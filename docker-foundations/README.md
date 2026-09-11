@@ -47,4 +47,8 @@ docker stop day29-web
 docker rm day29-web
 ```
 
+## Demo
+
+![Docker Foundations web service](screenshots/docker-foundations-demo.png)
+
 The `day29-data` volume remains available after the container is removed, so the visit count persists when a new container uses the same volume.
