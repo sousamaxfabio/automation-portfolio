@@ -1,4 +1,4 @@
-# 🤖 AI Automation & Integration Portfolio — Fabio Sousa
+# 🤖 AI Automation & Integration Portfolio — Fabio Sousa Max
 
 Practical automation projects built with n8n, Make, Python, APIs, and AI services.
 
@@ -44,6 +44,16 @@ A Python automation pipeline that reads CSV data, validates required fields, cla
 **Skills:** Python, OpenAI API, CSV processing, validation, logging, retry handling, environment variables
 
 [View Project](python-automations/day-26-project3-part2/README.md)
+
+### OpsPilot AI — Containerised Operations Triage
+
+A complete Docker Compose environment combining n8n and a Python FastAPI service. It receives operational requests, uses the OpenAI API to generate structured triage results, and preserves n8n data using persistent storage.
+
+**Skills:** Python, FastAPI, n8n, OpenAI Responses API, Docker, Docker Compose, GitHub Actions, automated testing, secure environment variables
+
+[View Project](project-4-opspilot-ai/README.md)
+
+---
 
 ## 🔧 Additional Automation Projects
 

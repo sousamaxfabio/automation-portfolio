@@ -270,6 +270,6 @@ GitHub Actions runs when Project 4 files change. It:
 - Validates the Compose configuration with fake CI values
 - Verifies that the Docker image builds
 
-## Video Demonstration
+## Verification Evidence
 
-A Loom demonstration link will be added after the final project verification.
+The repository includes a successful API-response screenshot, an exported n8n workflow, automated tests, and GitHub Actions validation for both Python and Docker.
