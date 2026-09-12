@@ -47,3 +47,40 @@ Do not use `docker compose down -v` unless you intentionally want to delete the 
 - Persistent Docker volumes
 - Workflow import and recovery
 - Secure credential handling
+
+## Troubleshooting Commands
+
+List running containers:
+
+```powershell
+docker ps
+```
+
+List local images:
+
+```powershell
+docker images
+```
+
+Inspect recent n8n logs:
+
+```powershell
+docker logs --tail 20 n8n-local-n8n-1
+```
+
+Stop and restart the container:
+
+```powershell
+docker stop n8n-local-n8n-1
+docker start n8n-local-n8n-1
+```
+
+Check whether the local port is reachable:
+
+```powershell
+Test-NetConnection localhost -Port 5678
+```
+
+## Failure and Recovery Test
+
+The Compose application was deliberately taken down to confirm that port `5678` became unavailable. Running `docker compose up -d` recreated the container and reattached the existing `n8n-local_n8n_data` volume. The saved workflows remained available after recovery.
