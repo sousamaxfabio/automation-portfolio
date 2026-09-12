@@ -1,0 +1,154 @@
+{
+  "name": "OpsPilot AI - Operations Triage",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "opspilot-triage",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "7b9c0a77-d4e7-4c7d-8c30-c0b1a4b5a979",
+      "name": "Receive Operations Request",
+      "webhookId": "f6b89a09-a0ef-472c-89fe-0f6bd8f0b39b"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "059c8dbd-eb4e-4d7d-9ae2-28529be7acb4",
+              "name": "requester",
+              "value": "={{ $json.body.requester }}",
+              "type": "string"
+            },
+            {
+              "id": "5554ec11-b334-475d-9c17-6470ff47b5d9",
+              "name": "title",
+              "value": "={{ $json.body.title }}",
+              "type": "string"
+            },
+            {
+              "id": "022d3158-7648-49a3-a806-c1dd6fd127a6",
+              "name": "description",
+              "value": "={{ $json.body.description }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "6baa566a-e8cc-4d8c-a2d8-e317d23cbc9d",
+      "name": "Prepare Request"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://ai-api:8000/triage",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "requester",
+              "value": "={{ $json.requester }}"
+            },
+            {
+              "name": "title",
+              "value": "={{ $json.title }}"
+            },
+            {
+              "name": "description",
+              "value": "={{ $json.description }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        448,
+        0
+      ],
+      "id": "3b6381c4-bec3-438f-837a-0d642fd64a2a",
+      "name": "Call OpsPilot AI"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        672,
+        0
+      ],
+      "id": "e8070234-5aba-4d70-80ce-13eca55d6fd4",
+      "name": "Return Triage Result"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Receive Operations Request": {
+      "main": [
+        [
+          {
+            "node": "Prepare Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Request": {
+      "main": [
+        [
+          {
+            "node": "Call OpsPilot AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call OpsPilot AI": {
+      "main": [
+        [
+          {
+            "node": "Return Triage Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "2b1e3248-9753-4a07-8156-c37bb4bbfc61",
+  "meta": {
+    "instanceId": "1ba455f29a116bfbc00097678303932c5e1e0d9501c9b25ba0fb992a0515bdf1"
+  },
+  "nodeGroups": [],
+  "id": "ZJ4hYfH313EU7Hki",
+  "tags": []
+}
