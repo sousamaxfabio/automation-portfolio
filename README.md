@@ -5,15 +5,21 @@ Practical automation projects built with n8n, Make, Python, APIs, and AI service
 ![GitHub last commit](https://img.shields.io/github/last-commit/sousamaxfabio/automation-portfolio)
 ![GitHub repo size](https://img.shields.io/github/repo-size/sousamaxfabio/automation-portfolio)
 
+[View Portfolio Website](https://sousamaxfabio.github.io/automation-portfolio/) · [Explore Featured Projects](#-featured-projects)
+
 ## 📌 About Me
 
-I am developing practical automation and integration solutions using Python, n8n, Make, REST APIs, webhooks, and AI services.
+I build practical automation and integration solutions using Python, n8n, Make, REST APIs, webhooks, and AI services.
 
 My projects focus on building reliable workflows that receive and transform data, connect external services, validate information, handle errors, and automate repetitive business processes.
 
+Previously, I provided first-line IT support in an international enterprise environment, resolving incidents through phone, email, and web channels, documenting solutions, and escalating complex issues to specialist teams. I now combine that troubleshooting background with hands-on automation development.
+
 **Location:** Canary Islands, Spain
 
-**Target Roles:** Junior Automation Engineer, Workflow Automation Specialist, Integration Specialist, AI Automation, and AI Operations
+**Languages:** Portuguese (native), English (advanced), Spanish (advanced)
+
+**Target Roles:** Technical Support Engineer, Integration Support Specialist, Junior Automation Engineer, Workflow Automation Specialist, and AI Automation Specialist
 
 ## 🚀 Featured Projects
 
@@ -45,6 +51,8 @@ A Python automation pipeline that reads CSV data, validates required fields, cla
 
 [View Project](python-automations/day-26-project3-part2/README.md)
 
+---
+
 ### OpsPilot AI — Containerised Operations Triage
 
 A complete Docker Compose environment combining n8n and a Python FastAPI service. It receives operational requests, uses the OpenAI API to generate structured triage results, and preserves n8n data using persistent storage.
@@ -67,12 +75,15 @@ A complete Docker Compose environment combining n8n and a Python FastAPI service
 
 ## 🛠️ Technical Skills
 
-- **Languages:** Python, Markdown
+- **Programming:** Python, JSON, Markdown
 - **Automation Platforms:** n8n, Make
-- **APIs & AI:** OpenAI API, REST APIs, Webhooks, JSON
+- **APIs & AI:** OpenAI API, REST APIs, webhooks, API authentication, Swagger/OpenAPI
+- **Backend & Testing:** FastAPI, Pydantic, Python `unittest`
 - **Integrations:** Airtable, Gmail, Google Sheets, Slack
-- **Development Tools:** Git, GitHub, VS Code
-- **Workflow Skills:** Data mapping, validation, conditional routing, retry handling, error handling, logging, human approval flows
+- **Containers & CI:** Docker, Docker Compose, GitHub Actions
+- **Development Tools:** Git, GitHub, VS Code, PowerShell
+- **Technical Operations:** Incident investigation, troubleshooting, escalation, logging, documentation
+- **Workflow Engineering:** Data mapping, validation, conditional routing, retry handling, error handling, audit logging, human approval flows
 
 ## 📚 Learning Progress
 
@@ -90,9 +101,15 @@ Completed practical work includes:
 - Python fundamentals
 - Python API integration
 - Python automation with validation, retries, and logging
+- FastAPI development and automated testing
+- Docker and Docker Compose
+- GitHub Actions continuous integration
+- Containerised AI automation with n8n and Python
 
 Further projects and skills are being added as the portfolio develops.
 
 ## 📫 Contact
 
 - GitHub: [@sousamaxfabio](https://github.com/sousamaxfabio)
+- LinkedIn: [linkedin.com/in/sousamaxfabio](https://www.linkedin.com/in/sousamaxfabio)
+- Email: [sousamax.fabio@gmail.com](mailto:sousamax.fabio@gmail.com)

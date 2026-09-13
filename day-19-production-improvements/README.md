@@ -73,6 +73,74 @@ flowchart LR
 
 A separate n8n workflow handles unexpected technical failures and sends a Gmail alert.
 
+## Prerequisites
+
+- A running n8n instance with form triggers available
+- An OpenAI credential configured in n8n
+- An Airtable personal access token with record read/write and schema-read access
+- A Gmail OAuth credential for success and failure notifications
+- An Airtable base with `Invoices` and `Execution Logs` tables
+
+No working credential values are included in the exported workflow files.
+
+## Airtable Schema
+
+Create these fields before configuring the Airtable nodes:
+
+### Invoices
+
+| Field | Suggested type |
+|---|---|
+| Supplier | Single line text |
+| Invoice Number | Single line text |
+| Invoice Date | Date |
+| Subtotal | Number |
+| VAT | Number |
+| Total | Number |
+| Currency | Single line text |
+| Payment Deadline | Date |
+| Status | Single select or text |
+| Validation Issues | Long text |
+| Approved at | Date and time |
+
+### Execution Logs
+
+| Field | Suggested type |
+|---|---|
+| Execution ID | Single line text |
+| Outcome | Single select or text |
+| Timestamp | Date and time |
+| Status | Single select or text |
+| Invoice Number | Single line text |
+| Supplier | Single line text |
+| Details | Long text |
+
+## Setup and Import
+
+1. Download [`workflow.json`](workflow.json) and [`failure-notification-workflow.json`](failure-notification-workflow.json).
+2. Import both JSON files into n8n using **Import from File**.
+3. In the main workflow, select your OpenAI credential in **OpenAI Chat Model**.
+4. Configure every Airtable node with your credential, base, and the appropriate `Invoices` or `Execution Logs` table.
+5. Configure **Send a message** in the main workflow with your Gmail credential and notification recipient.
+6. Configure **Send a message** in the failure workflow with your Gmail credential and failure-notification recipient.
+7. Save and activate the failure-notification workflow.
+8. Open the main workflow's settings and select the imported failure workflow as its error workflow.
+9. Save the main workflow and open its test form.
+10. Upload one of the fictional PDFs from [`sample-invoices`](sample-invoices/) and verify the resulting route.
+
+Resource selections and recipient placeholders must be replaced after import. Do not publish credentials or real invoice data.
+
+## Sample Test Data
+
+The `sample-invoices` directory contains fictional documents for the principal routes:
+
+- `sample-invoice.pdf` — valid invoice processing
+- `test-invoice-N8N-20260907-7F3C9A.pdf` — duplicate or unique-record testing
+- `test-invoice-missing-payment-deadline.pdf` — required-field validation
+- `non-invoice-test-document.pdf` — incorrect-document validation
+
+Use only fictional or appropriately anonymised documents when testing a public portfolio workflow.
+
 ## Reliability Features
 
 Retry handling is enabled on external-service nodes that may fail temporarily.
@@ -169,11 +237,70 @@ No invoice reaches record creation unless it is valid, approved, and not already
 ## Security and Limitations
 
 - API keys and access tokens are not committed to the repository.
+- Credentials should be stored only in n8n's encrypted credential store.
+- OpenAI, Airtable, and Gmail credentials should receive only the permissions required by this workflow.
 - Test invoice and company data are fictional.
 - Sensitive information should be removed or obscured in public screenshots.
+- Execution-history retention should be reviewed before processing real financial information.
 - Retry handling cannot recover from every external-service failure.
 - Search-before-create reduces duplicate risk but is not equivalent to a database uniqueness constraint.
 - Image-only PDFs may require OCR or vision processing.
+
+## Screenshots
+
+### Main workflow
+
+![Invoice-processing workflow](screenshots/workflow-overview.png)
+
+### Successful execution
+
+![Successful invoice execution](screenshots/successful-execution.png)
+
+### Incorrect-document validation
+
+![Incorrect document rejected](screenshots/incorrect-document-validation.png)
+
+### Missing payment deadline
+
+![Missing payment deadline rejected](screenshots/missing-payment-deadline-validation.png)
+
+### Technical failure and notification
+
+![Technical failure execution](screenshots/technical-failure-execution.png)
+
+![Failure-notification workflow](screenshots/failure-notification-workflow.png)
+
+![Failure notification email](screenshots/failure-notification-email.png)
+
+## Troubleshooting
+
+### The form does not open
+
+- Run the form trigger in test mode or activate the workflow before using its production URL.
+- Confirm that the uploaded file is a PDF.
+
+### OpenAI extraction fails
+
+- Confirm that the OpenAI credential is valid and has available usage.
+- Inspect the extracted text to confirm that the PDF is not image-only.
+- Review the failed node's output in n8n's execution history.
+
+### Airtable rejects a record
+
+- Confirm that every node points to the correct base and table.
+- Check that Airtable field names and types match the schema above.
+- Confirm that the personal access token has the required scopes and base access.
+
+### Notifications are not delivered
+
+- Reconnect the Gmail OAuth credential.
+- Confirm that both recipient placeholders were replaced.
+- Verify that the failure workflow is active and selected in the main workflow's settings.
+
+### A duplicate is created
+
+- Confirm that **Find Existing Invoice** searches by both supplier and invoice number.
+- For stronger production guarantees, add a database-level unique constraint or idempotency key.
 
 ## Project Files
 

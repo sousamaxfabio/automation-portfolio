@@ -150,7 +150,7 @@
             },
             {
               "id": "6b8e2d2e-ce6d-46c7-9d84-340eebdcba03",
-              "name": "=request_details",
+            "name": "request_details",
               "value": "={{ $('Prepare Request Data').item.json.request_details }}",
               "type": "string"
             },
