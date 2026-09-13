@@ -5,7 +5,7 @@ Practical automation projects built with n8n, Make, Python, APIs, and AI service
 ![GitHub last commit](https://img.shields.io/github/last-commit/sousamaxfabio/automation-portfolio)
 ![GitHub repo size](https://img.shields.io/github/repo-size/sousamaxfabio/automation-portfolio)
 
-[View Portfolio Website](https://sousamaxfabio.github.io/automation-portfolio/) · [Explore Featured Projects](#-featured-projects)
+[View Portfolio Website](https://sousamaxfabio.github.io/automation-portfolio/) · [Download CV](docs/Fabio_Sousa_Max_CV.pdf) · [Explore Featured Projects](#-featured-projects)
 
 ## 📌 About Me
 
