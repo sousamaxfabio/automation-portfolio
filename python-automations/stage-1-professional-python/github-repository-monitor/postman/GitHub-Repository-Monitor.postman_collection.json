@@ -1,0 +1,126 @@
+{
+    "info": {
+        "_postman_id": "c59486cc-5275-4bd1-bf67-d8543bd92016",
+        "name": "GitHub Repository Monitor",
+        "description": "Requests and tests for the GitHub Repository Monitor Stage 1 project.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "https://api.github.com",
+            "type": "string"
+        },
+        {
+            "key": "username",
+            "value": "sousamaxfabio",
+            "type": "string"
+        }
+    ],
+    "item": [
+        {
+            "name": "Get repositories - success",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                            "pm.test(\"Status code is 200\", function () {",
+                            "    pm.response.to.have.status(200);",
+                            "});",
+                            "",
+                            "pm.test(\"Response is an array\", function () {",
+                            "    const data = pm.response.json();",
+                            "    pm.expect(data).to.be.an(\"array\");",
+                            "});"
+                        ]
+                    }
+                }
+            ],
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Accept",
+                        "value": "application/vnd.github+json",
+                        "type": "text"
+                    },
+                    {
+                        "key": "User-Agent",
+                        "value": "github-repository-monitor",
+                        "type": "text"
+                    }
+                ],
+                "url": "{{base_url}}/users/{{username}}/repos?per_page=100&sort=updated",
+                "description": "Retrieves public repositories for the configured GitHub username."
+            }
+        },
+        {
+            "name": "User not found - 404",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                            "pm.test(\"Status code is 404\", function () {",
+                            "    pm.response.to.have.status(404);",
+                            "});"
+                        ]
+                    }
+                }
+            ],
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Accept",
+                        "value": "application/vnd.github+json",
+                        "type": "text"
+                    },
+                    {
+                        "key": "User-Agent",
+                        "value": "github-repository-monitor",
+                        "type": "text"
+                    }
+                ],
+                "url": "{{base_url}}/users/definitely-not-a-real-user-948271/repos",
+                "description": "Controlled unsuccessful scenario for diagnosing an unknown user."
+            }
+        },
+        {
+            "name": "Malformed endpoint - 404",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                            "pm.test(\"Status code is 404\", function () {",
+                            "    pm.response.to.have.status(404);",
+                            "});"
+                        ]
+                    }
+                }
+            ],
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Accept",
+                        "value": "application/vnd.github+json",
+                        "type": "text"
+                    },
+                    {
+                        "key": "User-Agent",
+                        "value": "github-repository-monitor",
+                        "type": "text"
+                    }
+                ],
+                "url": "{{base_url}}/userz/{{username}}/repos",
+                "description": "Controlled malformed-endpoint scenario for troubleshooting."
+            }
+        }
+    ]
+}
