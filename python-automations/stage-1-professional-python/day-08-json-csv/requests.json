@@ -1,0 +1,14 @@
+[
+    {
+        "id": "SR-001",
+        "title": "Password reset",
+        "priority": "low",
+        "resolved": true
+    },
+    {
+        "id": "SR-002",
+        "title": "Payment API unavailable",
+        "priority": "critical",
+        "resolved": false
+    }
+]
