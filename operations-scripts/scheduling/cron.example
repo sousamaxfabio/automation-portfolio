@@ -1,0 +1,18 @@
+# Stage 3 Linux scheduling examples
+#
+# Cron format:
+# minute hour day-of-month month day-of-week command
+#
+# These entries are examples only.
+# Saving this file does not activate the schedules.
+
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+# Run the GitHub health check every 15 minutes.
+# Append standard output and errors to a temporary log file.
+*/15 * * * * /usr/bin/env bash /mnt/c/Users/fabio/Documents/Codex/automation-portfolio/operations-scripts/bash/health_check.sh >> /tmp/stage3-health-check.log 2>&1
+
+# Inspect the portfolio application log every day at 09:00.
+# Append the inspection result to a separate temporary log file.
+0 9 * * * /usr/bin/env bash /mnt/c/Users/fabio/Documents/Codex/automation-portfolio/operations-scripts/bash/inspect_logs.sh /mnt/c/Users/fabio/Documents/Codex/automation-portfolio/app.log >> /tmp/stage3-log-inspection.log 2>&1
