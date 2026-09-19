@@ -1,0 +1,7 @@
+﻿"UserId","User","Department","Group","Role","Privileged","Recommendation","Reason"
+"NS-001","Marta Silva","Support","Support Team","Service Desk Agent","No","Keep","Access is active, approved and role-aligned"
+"NS-002","Alex Morgan","Finance","Finance Analysts","Finance Viewer","No","Keep","Access is active, approved and role-aligned"
+"NS-003","Jordan Lee","IT","Identity Operations","Password Administrator","Yes","Review","Privileged access expires on 2026-09-30"
+"NS-004","Taylor Chen","Marketing","Finance Analysts","Finance Viewer","No","Remove","Access is not approved; Department does not match the assigned group"
+"NS-005","Riley Patel","External","External Collaborators","Knowledge Base Reader","No","Remove","Account is not active; Access has expired"
+"NS-006","Casey Brown","Support","Support Team","Global Administrator","Yes","Remove","Access is not approved"

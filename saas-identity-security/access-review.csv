@@ -1,0 +1,7 @@
+user_id,display_name,department,account_status,group_name,role_name,resource,access_level,privileged,approved,expiry_date
+NS-001,Marta Silva,Support,Active,Support Team,Service Desk Agent,Service Desk,Read and update,No,Yes,
+NS-002,Alex Morgan,Finance,Active,Finance Analysts,Finance Viewer,Finance Reporting,Read only,No,Yes,
+NS-003,Jordan Lee,IT,Active,Identity Operations,Password Administrator,Microsoft Entra,Password resets,Yes,Yes,2026-09-30
+NS-004,Taylor Chen,Marketing,Active,Finance Analysts,Finance Viewer,Finance Reporting,Read only,No,No,
+NS-005,Riley Patel,External,Disabled,External Collaborators,Knowledge Base Reader,Knowledge Base,Read only,No,Yes,2026-09-01
+NS-006,Casey Brown,Support,Active,Support Team,Global Administrator,Microsoft Entra,Full administration,Yes,No,
