@@ -1,6 +1,6 @@
-# 🤖 AI Automation & Integration Portfolio — Fabio Sousa Max
+# 🤖 Automation, Integration & IT Operations Portfolio — Fabio Sousa Max
 
-Practical automation projects built with n8n, Make, Python, APIs, and AI services.
+Practical projects spanning Python, APIs, workflow automation, IT operations, SaaS administration, and identity and access support.
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/sousamaxfabio/automation-portfolio)
 ![GitHub repo size](https://img.shields.io/github/repo-size/sousamaxfabio/automation-portfolio)
@@ -9,19 +9,49 @@ Practical automation projects built with n8n, Make, Python, APIs, and AI service
 
 ## 📌 About Me
 
-I build practical automation and integration solutions using Python, n8n, Make, REST APIs, webhooks, and AI services.
+I build practical automation, integration, and operations solutions using Python, FastAPI, SQL, n8n, Make, REST APIs, Linux, PowerShell, Docker, and AI services.
 
-My projects focus on building reliable workflows that receive and transform data, connect external services, validate information, handle errors, and automate repetitive business processes.
+My projects focus on reliable workflows and services that receive and transform data, connect external systems, validate information, handle failures, automate repetitive processes, and produce useful operational evidence.
 
-Previously, I provided first-line IT support in an international enterprise environment, resolving incidents through phone, email, and web channels, documenting solutions, and escalating complex issues to specialist teams. I now combine that troubleshooting background with hands-on automation development.
+Previously, I provided first-line IT support in an international enterprise environment, resolving incidents through phone, email, and web channels, documenting solutions, and escalating complex issues to specialist teams. I now combine that troubleshooting background with hands-on automation, API integration, Linux and PowerShell operations, and identity-access fundamentals.
 
 **Location:** Canary Islands, Spain
 
-**Languages:** Portuguese (native), English (advanced), Spanish (advanced)
+**Languages:** Portuguese (native), English (fluent), Spanish (fluent)
 
-**Target Roles:** Technical Support Engineer, Integration Support Specialist, Junior Automation Engineer, Workflow Automation Specialist, and AI Automation Specialist
+**Target Roles:** Junior Automation Specialist, Integration Support Specialist, IT Operations Specialist, SaaS Operations, Application Support, Systems Support, and Identity and Access Support
 
 ## 🚀 Featured Projects
+
+### SaaS Identity and Access Review
+
+A fictional SaaS administration and identity-security case study covering secure onboarding and offboarding, IAM, RBAC, SSO, least privilege, and access-denied troubleshooting. Includes a PowerShell access-review tool that evaluates approvals, department alignment, privileged access, and expiry dates before exporting an audit report.
+
+**Skills:** SaaS administration, IAM, RBAC, SSO, least privilege, Microsoft Entra ID fundamentals, PowerShell, access reviews
+
+[View Project](saas-identity-security/README.md)
+
+---
+
+### Operations Scripts Toolkit
+
+Documented Bash and PowerShell tools for endpoint health checks, API testing, and application-log inspection, together with scheduling examples and a failed Docker service investigation.
+
+**Skills:** Linux, Bash, PowerShell, curl, logs, cron, processes, services, Docker troubleshooting
+
+[View Project](operations-scripts/README.md)
+
+---
+
+### SQL and FastAPI Service
+
+A Docker-packaged FastAPI service using PostgreSQL and SQLite, authenticated GET and POST endpoints, Pydantic validation, health and readiness checks, parameterised SQL, transactions, and automated endpoint tests.
+
+**Skills:** Python, SQL, FastAPI, PostgreSQL, SQLite, Pydantic, pytest, API authentication, Docker
+
+[View Project](stage2-api-service/README.md)
+
+---
 
 ### AI Service Request Classifier
 
@@ -65,6 +95,7 @@ A complete Docker Compose environment combining n8n and a Python FastAPI service
 
 ## 🔧 Additional Automation Projects
 
+- [GitHub Repository Monitor](python-automations/stage-1-professional-python/github-repository-monitor/README.md) — tested API client with authentication, pagination, timeouts, retries, rate-limit handling, structured logging, and Postman evidence
 - [Service Request API](service-request-api/README.md) — REST-style webhook API with validation, urgency routing, timestamps, and HTTP responses
 - [Human Approval Workflow](day-13-human-approval/README.md) — Gmail-based human approval and conditional routing
 - [Essential Integrations](day-12-essential-integrations/README.md) — Gmail, Slack, OpenAI, and Airtable integrations
@@ -75,14 +106,16 @@ A complete Docker Compose environment combining n8n and a Python FastAPI service
 
 ## 🛠️ Technical Skills
 
-- **Programming:** Python, JSON, Markdown
+- **Programming & Data:** Python, FastAPI, Pydantic, SQL, PostgreSQL, SQLite, JSON, CSV
 - **Automation Platforms:** n8n, Make
-- **APIs & AI:** OpenAI API, REST APIs, webhooks, API authentication, Swagger/OpenAPI
-- **Backend & Testing:** FastAPI, Pydantic, Python `unittest`
+- **APIs & AI:** OpenAI API, REST APIs, webhooks, API authentication, Postman, curl, Swagger/OpenAPI
+- **Testing:** pytest, `unittest`, endpoint testing, mocking, coverage
 - **Integrations:** Airtable, Gmail, Google Sheets, Slack
 - **Containers & CI:** Docker, Docker Compose, GitHub Actions
-- **Development Tools:** Git, GitHub, VS Code, PowerShell
-- **Technical Operations:** Incident investigation, troubleshooting, escalation, logging, documentation
+- **Operations & Scripting:** Linux, Bash, PowerShell, health checks, log inspection, scheduled tasks, process and service troubleshooting
+- **SaaS & Identity:** IAM, RBAC, SSO, Microsoft Entra ID fundamentals, access reviews, onboarding, offboarding, least privilege
+- **Development Tools:** Git, GitHub, VS Code
+- **Technical Support:** Incident investigation, authentication and permission troubleshooting, escalation, documentation
 - **Workflow Engineering:** Data mapping, validation, conditional routing, retry handling, error handling, audit logging, human approval flows
 
 ## 📚 Learning Progress
@@ -105,6 +138,13 @@ Completed practical work includes:
 - Docker and Docker Compose
 - GitHub Actions continuous integration
 - Containerised AI automation with n8n and Python
+- Linux filesystem, permissions, processes, services, networking, and logs
+- Bash and PowerShell operations scripting
+- Docker failed-service investigation
+- SaaS user onboarding and offboarding procedures
+- IAM, RBAC, SSO, access reviews, and least privilege
+
+Microsoft Learn training aligned with SC-900 is in progress. The security, compliance, and identity concepts learning path has been completed; Microsoft Entra, security solutions, and Microsoft Purview remain in progress. No certification is claimed unless the official exam is passed.
 
 Further projects and skills are being added as the portfolio develops.
 
