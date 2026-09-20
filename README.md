@@ -23,6 +23,16 @@ Previously, I provided first-line IT support in an international enterprise envi
 
 ## 🚀 Featured Projects
 
+### Secure Google Cloud Deployment
+
+A private, scale-to-zero Cloud Run deployment of the Stage 2 FastAPI service using a dedicated runtime identity, Secret Manager, Cloud Logging, Cloud Monitoring, Cloud Storage, Pub/Sub, and a controlled temporary Cloud SQL integration. Includes documented recovery, troubleshooting, cost controls, and least-privilege cleanup.
+
+**Skills:** Google Cloud, Cloud Run, Cloud SQL, Cloud Storage, Pub/Sub, Secret Manager, IAM, service accounts, Cloud Logging, Cloud Monitoring, Docker
+
+[View Project](gcp-cloud-deployment/README.md)
+
+---
+
 ### SaaS Identity and Access Review
 
 A fictional SaaS administration and identity-security case study covering secure onboarding and offboarding, IAM, RBAC, SSO, least privilege, and access-denied troubleshooting. Includes a PowerShell access-review tool that evaluates approvals, department alignment, privileged access, and expiry dates before exporting an audit report.
@@ -111,7 +121,8 @@ A complete Docker Compose environment combining n8n and a Python FastAPI service
 - **APIs & AI:** OpenAI API, REST APIs, webhooks, API authentication, Postman, curl, Swagger/OpenAPI
 - **Testing:** pytest, `unittest`, endpoint testing, mocking, coverage
 - **Integrations:** Airtable, Gmail, Google Sheets, Slack
-- **Containers & CI:** Docker, Docker Compose, GitHub Actions
+- **Cloud & Deployment:** Google Cloud, Cloud Run, Cloud SQL, Cloud Storage, Pub/Sub, Secret Manager, Cloud Logging, Cloud Monitoring
+- **Containers & CI:** Docker, Docker Compose, Artifact Registry, Cloud Build, GitHub Actions
 - **Operations & Scripting:** Linux, Bash, PowerShell, health checks, log inspection, scheduled tasks, process and service troubleshooting
 - **SaaS & Identity:** IAM, RBAC, SSO, Microsoft Entra ID fundamentals, access reviews, onboarding, offboarding, least privilege
 - **Development Tools:** Git, GitHub, VS Code
@@ -143,6 +154,7 @@ Completed practical work includes:
 - Docker failed-service investigation
 - SaaS user onboarding and offboarding procedures
 - IAM, RBAC, SSO, access reviews, and least privilege
+- Secure Google Cloud Run deployment with IAM, service accounts, secrets, logging, monitoring, storage, messaging, and temporary PostgreSQL integration
 
 Microsoft Learn training aligned with SC-900 is in progress. The security, compliance, and identity concepts learning path has been completed; Microsoft Entra, security solutions, and Microsoft Purview remain in progress. No certification is claimed unless the official exam is passed.
 
