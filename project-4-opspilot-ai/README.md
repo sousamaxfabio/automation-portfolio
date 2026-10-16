@@ -273,3 +273,11 @@ GitHub Actions runs when Project 4 files change. It:
 ## Verification Evidence
 
 The repository includes a successful API-response screenshot, an exported n8n workflow, automated tests, and GitHub Actions validation for both Python and Docker.
+
+## Portfolio Context and Limits
+
+This is a personal portfolio project demonstrating an end-to-end n8n-to-Python AI integration, rather than a commercial operations platform. Input constraints, structured output, a request ID and controlled error responses make the integration inspectable.
+
+The automated tests use a mocked AI client. They verify application behaviour, not the accuracy of live AI classifications. The model's confidence value is self-reported and is not a calibrated probability. A human should review recommendations before taking action.
+
+The service does not currently implement caller authentication, rate limiting, durable request storage or an evaluation dataset. Add these controls and verify deployment configuration before exposing it beyond a controlled demonstration environment.
