@@ -1,6 +1,6 @@
-# 🤖 Automation, Integration & IT Operations Portfolio — Fabio Sousa Max
+# Junior AI Automation & Integration Specialist — Fabio Sousa Max
 
-Practical projects spanning Python, APIs, workflow automation, IT operations, SaaS administration, and identity and access support.
+Portfolio projects connecting AI services, APIs and business workflows with Python, n8n and FastAPI.
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/sousamaxfabio/automation-portfolio)
 ![GitHub repo size](https://img.shields.io/github/repo-size/sousamaxfabio/automation-portfolio)
@@ -19,9 +19,55 @@ Previously, I provided first-line IT support in an international enterprise envi
 
 **Languages:** Portuguese (native), English (fluent), Spanish (fluent)
 
-**Target Roles:** Junior Automation Specialist, Integration Support Specialist, IT Operations Specialist, SaaS Operations, Application Support, Systems Support, and Identity and Access Support
+**Primary focus:** Junior AI Automation & Integration Specialist
+
+**Related opportunities:** Junior Automation Specialist, Integration Support Specialist and Application Support roles involving APIs and workflow automation.
+
+These are personal portfolio and learning projects. They demonstrate implementation and troubleshooting; they do not imply commercial deployments, client results or certifications.
 
 ## 🚀 Featured Projects
+
+Four complementary examples of AI integration, business workflow automation, backend services and API reliability. See each project for setup, sample output and verification evidence.
+
+### OpsPilot AI — Containerised Operations Triage
+
+A complete Docker Compose environment combining n8n and a Python FastAPI service. It receives operational requests, uses the OpenAI API to generate structured triage results, and preserves n8n data using persistent storage.
+
+**Skills:** Python, FastAPI, n8n, OpenAI Responses API, Docker, Docker Compose, GitHub Actions, automated testing, secure environment variables
+
+[View Project](project-4-opspilot-ai/README.md)
+
+---
+
+### Intelligent Invoice Processing Automation
+
+An n8n-based invoice processing workflow with AI-powered information extraction, validation, human approval, duplicate detection, Airtable logging, retry handling, and success and failure notifications.
+
+**Skills:** n8n, OpenAI, Airtable, Gmail, validation, human approval, error workflows, retries
+
+[View Project](day-19-production-improvements/README.md)
+
+---
+
+### SQL and FastAPI Service
+
+A Docker-packaged FastAPI service using PostgreSQL and SQLite, authenticated GET and POST endpoints, Pydantic validation, health and readiness checks, parameterised SQL, transactions, and automated endpoint tests.
+
+**Skills:** Python, SQL, FastAPI, PostgreSQL, SQLite, Pydantic, pytest, API authentication, Docker
+
+[View Project](stage2-api-service/README.md)
+
+---
+
+### GitHub Repository Monitor
+
+A Python integration with optional token authentication, pagination, response validation, timeouts, retries with backoff, rate-limit handling, JSON output and automated tests. Includes Postman examples and incident reports.
+
+**Skills:** Python, REST APIs, authentication, pagination, validation, pytest, logging, troubleshooting
+
+[View Project](python-automations/stage-1-professional-python/github-repository-monitor/README.md)
+
+## Supporting Projects
 
 ### Secure Google Cloud Deployment
 
@@ -53,16 +99,6 @@ Documented Bash and PowerShell tools for endpoint health checks, API testing, an
 
 ---
 
-### SQL and FastAPI Service
-
-A Docker-packaged FastAPI service using PostgreSQL and SQLite, authenticated GET and POST endpoints, Pydantic validation, health and readiness checks, parameterised SQL, transactions, and automated endpoint tests.
-
-**Skills:** Python, SQL, FastAPI, PostgreSQL, SQLite, Pydantic, pytest, API authentication, Docker
-
-[View Project](stage2-api-service/README.md)
-
----
-
 ### AI Service Request Classifier
 
 An n8n workflow that receives service requests through a webhook, uses OpenAI to classify them, validates the AI output, stores valid requests in Google Sheets, and notifies a service team through Slack.
@@ -73,16 +109,6 @@ An n8n workflow that receives service requests through a webhook, uses OpenAI to
 
 ---
 
-### Intelligent Invoice Processing Automation
-
-An n8n-based invoice processing workflow with AI-powered information extraction, validation, human approval, duplicate detection, Airtable logging, retry handling, and success and failure notifications.
-
-**Skills:** n8n, OpenAI, Airtable, Gmail, validation, human approval, error workflows, retries
-
-[View Project](day-19-production-improvements/README.md)
-
----
-
 ### AI CSV Classification Pipeline
 
 A Python automation pipeline that reads CSV data, validates required fields, classifies products using the OpenAI API, handles retries and errors, and writes structured results to a new CSV file.
@@ -90,18 +116,6 @@ A Python automation pipeline that reads CSV data, validates required fields, cla
 **Skills:** Python, OpenAI API, CSV processing, validation, logging, retry handling, environment variables
 
 [View Project](python-automations/day-26-project3-part2/README.md)
-
----
-
-### OpsPilot AI — Containerised Operations Triage
-
-A complete Docker Compose environment combining n8n and a Python FastAPI service. It receives operational requests, uses the OpenAI API to generate structured triage results, and preserves n8n data using persistent storage.
-
-**Skills:** Python, FastAPI, n8n, OpenAI Responses API, Docker, Docker Compose, GitHub Actions, automated testing, secure environment variables
-
-[View Project](project-4-opspilot-ai/README.md)
-
----
 
 ## 🔧 Additional Automation Projects
 
