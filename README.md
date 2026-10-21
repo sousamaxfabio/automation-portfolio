@@ -1,181 +1,75 @@
-# Junior AI Automation & Integration Specialist — Fabio Sousa Max
+# Fabio Sousa Max | Python Automation & API Integrations
 
-Portfolio projects connecting AI services, APIs and business workflows with Python, n8n and FastAPI.
+**Python · FastAPI · n8n · Make · REST APIs · OpenAI · Docker**
 
-![GitHub last commit](https://img.shields.io/github/last-commit/sousamaxfabio/automation-portfolio)
-![GitHub repo size](https://img.shields.io/github/repo-size/sousamaxfabio/automation-portfolio)
+I build automation workflows and API integrations that turn incoming requests into validated, actionable results. Below are working portfolio projects with source code, setup instructions and test or screenshot evidence.
 
-[View Portfolio Website](https://sousamaxfabio.github.io/automation-portfolio/) · [Download CV](docs/Fabio_Sousa_Max_CV.pdf) · [Explore Featured Projects](#-featured-projects)
+**Based in:** Canary Islands, Spain · **Languages:** Portuguese (native), Spanish and English · **Open to:** remote junior automation, integration and technical operations roles
 
-## 📌 About Me
+[**Explore OpsPilot AI**](project-4-opspilot-ai/README.md) · [**View my CV**](docs/Fabio_Sousa_Max_CV.pdf) · [**Connect on LinkedIn**](https://www.linkedin.com/in/sousamaxfabio)
 
-I build practical automation, integration, and operations solutions using Python, FastAPI, SQL, n8n, Make, REST APIs, Linux, PowerShell, Docker, and AI services.
+> **Demo status:** These are portfolio projects, not publicly hosted commercial services. Screenshots, source code, local run instructions and automated tests are linked below. No live public demo URL is claimed.
 
-My projects focus on reliable workflows and services that receive and transform data, connect external systems, validate information, handle failures, automate repetitive processes, and produce useful operational evidence.
+## Featured projects
 
-Previously, I provided first-line IT support in an international enterprise environment, resolving incidents through phone, email, and web channels, documenting solutions, and escalating complex issues to specialist teams. I now combine that troubleshooting background with hands-on automation, API integration, Linux and PowerShell operations, and identity-access fundamentals.
+### 01 — [OpsPilot AI: AI-powered operations triage](project-4-opspilot-ai/README.md)
 
-**Location:** Canary Islands, Spain
+**n8n + FastAPI + OpenAI + Docker Compose**
 
-**Languages:** Portuguese (native), English (fluent), Spanish (fluent)
+Receives operational requests through an n8n webhook, validates input, sends it to a Python API for structured AI triage, and returns category, urgency and recommended action. Includes a reproducible Docker setup, GitHub Actions CI, automated tests and a documented architecture.
 
-**Primary focus:** Junior AI Automation & Integration Specialist
+[**See screenshot, workflow and how to run it →**](project-4-opspilot-ai/README.md)
 
-**Related opportunities:** Junior Automation Specialist, Integration Support Specialist and Application Support roles involving APIs and workflow automation.
+![OpsPilot AI successful API triage example](project-4-opspilot-ai/screenshots/api-triage-success.png)
 
-These are personal portfolio and learning projects. They demonstrate implementation and troubleshooting; they do not imply commercial deployments, client results or certifications.
+### 02 — [SQL & FastAPI Service: validated API with tests](stage2-api-service/README.md)
 
-## 🚀 Featured Projects
+**Python + FastAPI + PostgreSQL/SQLite + Docker + pytest**
 
-Four complementary examples of AI integration, business workflow automation, backend services and API reliability. See each project for setup, sample output and verification evidence.
+A containerised backend service with authenticated GET/POST endpoints, Pydantic request validation, parameterised SQL, transactions, health/readiness endpoints and automated endpoint tests.
 
-### OpsPilot AI — Containerised Operations Triage
+[**Explore endpoints, tests and setup →**](stage2-api-service/README.md)
 
-A complete Docker Compose environment combining n8n and a Python FastAPI service. It receives operational requests, uses the OpenAI API to generate structured triage results, and preserves n8n data using persistent storage.
+### 03 — [Intelligent Invoice Processing: human-in-the-loop automation](day-19-production-improvements/README.md)
 
-**Skills:** Python, FastAPI, n8n, OpenAI Responses API, Docker, Docker Compose, GitHub Actions, automated testing, secure environment variables
+**n8n + OpenAI + Airtable + Gmail**
 
-[View Project](project-4-opspilot-ai/README.md)
+Extracts invoice information, validates it, routes cases for human approval, checks duplicates, logs outcomes and handles retries and notifications.
 
----
+[**Explore workflow and evidence →**](day-19-production-improvements/README.md)
 
-### Intelligent Invoice Processing Automation
+### 04 — [GitHub Repository Monitor: resilient Python API client](python-automations/stage-1-professional-python/github-repository-monitor/README.md)
 
-An n8n-based invoice processing workflow with AI-powered information extraction, validation, human approval, duplicate detection, Airtable logging, retry handling, and success and failure notifications.
+**Python + REST APIs + pytest + Postman**
 
-**Skills:** n8n, OpenAI, Airtable, Gmail, validation, human approval, error workflows, retries
+Demonstrates optional API authentication, pagination, timeout handling, retries with backoff, rate-limit handling, validation, structured logging and automated tests.
 
-[View Project](day-19-production-improvements/README.md)
+[**Explore code, tests and examples →**](python-automations/stage-1-professional-python/github-repository-monitor/README.md)
 
----
+## Other practical work
 
-### SQL and FastAPI Service
+- [Google Cloud deployment](gcp-cloud-deployment/README.md) — private Cloud Run deployment, IAM, secrets, logging and monitoring; **not a public demo endpoint**
+- [AI service request classifier](day-14-ai-service-request-classifier/README.md) — webhook intake, OpenAI classification, validation, Sheets and Slack routing
+- [Service request webhook API](service-request-api/README.md) — request validation, urgency routing and HTTP responses in n8n
+- [AI CSV classification pipeline](python-automations/day-26-project3-part2/README.md) — file processing, OpenAI classification, retries and logging
+- [SaaS identity and access review](saas-identity-security/README.md) — fictional onboarding/offboarding and permissions audit case study
+- [Operations scripts toolkit](operations-scripts/README.md) — Bash, PowerShell, health checks and logs
 
-A Docker-packaged FastAPI service using PostgreSQL and SQLite, authenticated GET and POST endpoints, Pydantic validation, health and readiness checks, parameterised SQL, transactions, and automated endpoint tests.
+## Technical toolkit
 
-**Skills:** Python, SQL, FastAPI, PostgreSQL, SQLite, Pydantic, pytest, API authentication, Docker
+| Area | Tools and methods |
+| --- | --- |
+| Automation & integrations | n8n, Make, webhooks, REST APIs, JSON, Airtable, Gmail, Slack, Google Sheets |
+| Python & backend | Python, FastAPI, Pydantic, SQL, PostgreSQL, SQLite |
+| AI integrations | OpenAI API, classification, structured output, validation, human review |
+| Testing & reliability | pytest, unittest, retries, error handling, logging, GitHub Actions |
+| Deployment & operations | Docker, Docker Compose, Google Cloud, Linux, Bash, PowerShell |
+| Identity fundamentals | IAM, RBAC, SSO, least privilege, access reviews |
 
-[View Project](stage2-api-service/README.md)
+## About me
 
----
+I previously worked in enterprise IT support, investigating incidents and helping users in a multilingual environment. I now focus on building and troubleshooting automation systems, backend APIs and integrations.
 
-### GitHub Repository Monitor
+**These are personal projects** demonstrating hands-on implementation, not paid client deployments or claimed certifications. Learning exercises remain in the repository for technical reference, but the featured projects above are the recommended starting point.
 
-A Python integration with optional token authentication, pagination, response validation, timeouts, retries with backoff, rate-limit handling, JSON output and automated tests. Includes Postman examples and incident reports.
-
-**Skills:** Python, REST APIs, authentication, pagination, validation, pytest, logging, troubleshooting
-
-[View Project](python-automations/stage-1-professional-python/github-repository-monitor/README.md)
-
-## Supporting Projects
-
-### Secure Google Cloud Deployment
-
-A private, scale-to-zero Cloud Run deployment of the Stage 2 FastAPI service using a dedicated runtime identity, Secret Manager, Cloud Logging, Cloud Monitoring, Cloud Storage, Pub/Sub, and a controlled temporary Cloud SQL integration. Includes documented recovery, troubleshooting, cost controls, and least-privilege cleanup.
-
-**Skills:** Google Cloud, Cloud Run, Cloud SQL, Cloud Storage, Pub/Sub, Secret Manager, IAM, service accounts, Cloud Logging, Cloud Monitoring, Docker
-
-[View Project](gcp-cloud-deployment/README.md)
-
----
-
-### SaaS Identity and Access Review
-
-A fictional SaaS administration and identity-security case study covering secure onboarding and offboarding, IAM, RBAC, SSO, least privilege, and access-denied troubleshooting. Includes a PowerShell access-review tool that evaluates approvals, department alignment, privileged access, and expiry dates before exporting an audit report.
-
-**Skills:** SaaS administration, IAM, RBAC, SSO, least privilege, Microsoft Entra ID fundamentals, PowerShell, access reviews
-
-[View Project](saas-identity-security/README.md)
-
----
-
-### Operations Scripts Toolkit
-
-Documented Bash and PowerShell tools for endpoint health checks, API testing, and application-log inspection, together with scheduling examples and a failed Docker service investigation.
-
-**Skills:** Linux, Bash, PowerShell, curl, logs, cron, processes, services, Docker troubleshooting
-
-[View Project](operations-scripts/README.md)
-
----
-
-### AI Service Request Classifier
-
-An n8n workflow that receives service requests through a webhook, uses OpenAI to classify them, validates the AI output, stores valid requests in Google Sheets, and notifies a service team through Slack.
-
-**Skills:** n8n, OpenAI, Webhooks, JSON, Google Sheets, Slack, validation, conditional routing
-
-[View Project](day-14-ai-service-request-classifier/README.md)
-
----
-
-### AI CSV Classification Pipeline
-
-A Python automation pipeline that reads CSV data, validates required fields, classifies products using the OpenAI API, handles retries and errors, and writes structured results to a new CSV file.
-
-**Skills:** Python, OpenAI API, CSV processing, validation, logging, retry handling, environment variables
-
-[View Project](python-automations/day-26-project3-part2/README.md)
-
-## 🔧 Additional Automation Projects
-
-- [GitHub Repository Monitor](python-automations/stage-1-professional-python/github-repository-monitor/README.md) — tested API client with authentication, pagination, timeouts, retries, rate-limit handling, structured logging, and Postman evidence
-- [Service Request API](service-request-api/README.md) — REST-style webhook API with validation, urgency routing, timestamps, and HTTP responses
-- [Human Approval Workflow](day-13-human-approval/README.md) — Gmail-based human approval and conditional routing
-- [Essential Integrations](day-12-essential-integrations/README.md) — Gmail, Slack, OpenAI, and Airtable integrations
-- [Scheduled Weather Check](day-12-scheduled-weather-check/README.md) — scheduled API automation
-- [Webhook Practice](day-11-webhook-practice/README.md) — webhook input and response handling
-- [Data and Expressions](day-10-data-and-expressions/README.md) — n8n data mapping and expressions
-- [Live Weather Check](day-9-live-weather-check/README.md) — live API integration
-
-## 🛠️ Technical Skills
-
-- **Programming & Data:** Python, FastAPI, Pydantic, SQL, PostgreSQL, SQLite, JSON, CSV
-- **Automation Platforms:** n8n, Make
-- **APIs & AI:** OpenAI API, REST APIs, webhooks, API authentication, Postman, curl, Swagger/OpenAPI
-- **Testing:** pytest, `unittest`, endpoint testing, mocking, coverage
-- **Integrations:** Airtable, Gmail, Google Sheets, Slack
-- **Cloud & Deployment:** Google Cloud, Cloud Run, Cloud SQL, Cloud Storage, Pub/Sub, Secret Manager, Cloud Logging, Cloud Monitoring
-- **Containers & CI:** Docker, Docker Compose, Artifact Registry, Cloud Build, GitHub Actions
-- **Operations & Scripting:** Linux, Bash, PowerShell, health checks, log inspection, scheduled tasks, process and service troubleshooting
-- **SaaS & Identity:** IAM, RBAC, SSO, Microsoft Entra ID fundamentals, access reviews, onboarding, offboarding, least privilege
-- **Development Tools:** Git, GitHub, VS Code
-- **Technical Support:** Incident investigation, authentication and permission troubleshooting, escalation, documentation
-- **Workflow Engineering:** Data mapping, validation, conditional routing, retry handling, error handling, audit logging, human approval flows
-
-## 📚 Learning Progress
-
-Completed practical work includes:
-
-- Git and GitHub fundamentals
-- API and webhook fundamentals
-- n8n workflow development
-- n8n expressions and data transformation
-- External service integrations
-- Human approval workflows
-- AI-powered classification
-- Invoice-processing automation
-- Make fundamentals
-- Python fundamentals
-- Python API integration
-- Python automation with validation, retries, and logging
-- FastAPI development and automated testing
-- Docker and Docker Compose
-- GitHub Actions continuous integration
-- Containerised AI automation with n8n and Python
-- Linux filesystem, permissions, processes, services, networking, and logs
-- Bash and PowerShell operations scripting
-- Docker failed-service investigation
-- SaaS user onboarding and offboarding procedures
-- IAM, RBAC, SSO, access reviews, and least privilege
-- Secure Google Cloud Run deployment with IAM, service accounts, secrets, logging, monitoring, storage, messaging, and temporary PostgreSQL integration
-
-Microsoft Learn training aligned with SC-900 is in progress. The security, compliance, and identity concepts learning path has been completed; Microsoft Entra, security solutions, and Microsoft Purview remain in progress. No certification is claimed unless the official exam is passed.
-
-Further projects and skills are being added as the portfolio develops.
-
-## 📫 Contact
-
-- GitHub: [@sousamaxfabio](https://github.com/sousamaxfabio)
-- LinkedIn: [linkedin.com/in/sousamaxfabio](https://www.linkedin.com/in/sousamaxfabio)
-- Email: [sousamax.fabio@gmail.com](mailto:sousamax.fabio@gmail.com)
+**Contact:** [LinkedIn](https://www.linkedin.com/in/sousamaxfabio) · [GitHub](https://github.com/sousamaxfabio) · [Email](mailto:sousamax.fabio@gmail.com)
