@@ -47,8 +47,8 @@ See [architecture.md](architecture.md) for the system diagram and request flow.
 - [IAM and service-account explanation](iam-and-service-accounts.md)
 - [Troubleshooting record](troubleshooting.md)
 - [Cost controls and cleanup](cost-controls-and-cleanup.md)
-- [FastAPI service](../stage2-api-service/README.md)
-- [Cloud Run-compatible Dockerfile](../stage2-api-service/Dockerfile)
+- [FastAPI service](../fastapi-database-service/README.md)
+- [Cloud Run-compatible Dockerfile](../fastapi-database-service/Dockerfile)
 
 ## Services practised
 
