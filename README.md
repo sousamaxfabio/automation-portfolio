@@ -73,3 +73,8 @@ I previously worked in enterprise IT support, investigating incidents and helpin
 **These are personal projects** demonstrating hands-on implementation, not paid client deployments or claimed certifications. Learning exercises remain in the repository for technical reference, but the featured projects above are the recommended starting point.
 
 **Contact:** [LinkedIn](https://www.linkedin.com/in/sousamaxfabio) · [GitHub](https://github.com/sousamaxfabio) · [Email](mailto:sousamax.fabio@gmail.com)
+
+
+## Learning archive
+
+Earlier step-by-step exercises are preserved in [**Learning Labs**](archive/learning-labs/README.md). They are separate from the featured projects above.
