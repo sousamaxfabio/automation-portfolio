@@ -7,6 +7,7 @@ Earlier experiments and training exercises live here so the main repository stay
 - [Invoice iterations](invoice-iterations/) — initial invoice workflows before the final [invoice automation](../../invoice-processing-automation/README.md)
 - [Docker fundamentals](docker/) — container practice
 - [Git exercises](git/) — introductory work
+- [Python exercises](python/python-automations/) — Python fundamentals and earlier API prototypes
 
 For the polished projects, go to the [portfolio overview](../../README.md).
 

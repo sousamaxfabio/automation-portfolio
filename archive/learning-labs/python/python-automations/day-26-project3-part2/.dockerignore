@@ -1,0 +1,8 @@
+.env
+__pycache__/
+*.pyc
+*.log
+results.csv
+screenshots/
+.git/
+README.md

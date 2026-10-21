@@ -38,20 +38,20 @@ Extracts invoice information, validates it, routes cases for human approval, che
 
 [**Explore workflow and evidence →**](invoice-processing-automation/README.md)
 
-### 04 — [GitHub Repository Monitor: resilient Python API client](python-automations/stage-1-professional-python/github-repository-monitor/README.md)
+### 04 — [GitHub Repository Monitor: resilient Python API client](github-api-monitor/README.md)
 
 **Python + REST APIs + pytest + Postman**
 
 Demonstrates optional API authentication, pagination, timeout handling, retries with backoff, rate-limit handling, validation, structured logging and automated tests.
 
-[**Explore code, tests and examples →**](python-automations/stage-1-professional-python/github-repository-monitor/README.md)
+[**Explore code, tests and examples →**](github-api-monitor/README.md)
 
 ## Other practical work
 
 - [Google Cloud deployment](gcp-cloud-deployment/README.md) — private Cloud Run deployment, IAM, secrets, logging and monitoring; **not a public demo endpoint**
 - [AI service request classifier](ai-service-request-classifier/README.md) — webhook intake, OpenAI classification, validation, Sheets and Slack routing
 - [Service request webhook API](service-request-api/README.md) — request validation, urgency routing and HTTP responses in n8n
-- [AI CSV classification pipeline](python-automations/day-26-project3-part2/README.md) — file processing, OpenAI classification, retries and logging
+- [AI CSV classification pipeline](ai-csv-classifier/README.md) — file processing, OpenAI classification, retries and logging
 - [SaaS identity and access review](saas-identity-security/README.md) — fictional onboarding/offboarding and permissions audit case study
 - [Operations scripts toolkit](operations-scripts/README.md) — Bash, PowerShell, health checks and logs
 

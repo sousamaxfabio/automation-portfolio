@@ -1,0 +1,17 @@
+id,name,description,price,category,confidence,status
+1,Wireless Mouse,Ergonomic wireless mouse with long battery life for office work,25.99,Office,0.95,classified
+2,Running Shoes,Lightweight shoes for marathon training and daily jogging,89.99,Fitness,0.95,classified
+3,Coffee Maker,Automatic drip coffee maker with timer for kitchen,49.99,Kitchen,0.95,classified
+4,Yoga Mat,Non-slip yoga mat for fitness and meditation,19.99,Fitness,0.95,classified
+5,Python Book,Learn Python programming from zero to advanced level,39.99,Education,0.95,classified
+6,Bluetooth Headphones,Noise cancelling over-ear headphones with mic,59.99,Electronics,0.95,classified
+7,Desk Lamp,LED desk lamp with adjustable brightness for reading,29.99,Office,0.95,classified
+8,Water Bottle,Stainless steel insulated water bottle for gym,15.50,Fitness,0.95,classified
+9,Gaming Keyboard,Mechanical RGB gaming keyboard for PC,79.99,Electronics,0.95,classified
+10,Smart Watch,Fitness tracker smartwatch with heart rate monitor,129.99,Fitness,0.95,classified
+13,Office Chair,Ergonomic office chair with lumbar support,,Office,0.95,classified
+14,Protein Powder,Whey protein powder for muscle building,45.00,Fitness,0.95,classified
+15,Notebook,Paper notebook for notes and journaling,5.99,Office,0.95,classified
+16,Webcam,HD webcam for video calls and streaming,65.00,Electronics,0.95,classified
+17,Backpack,Waterproof backpack for laptop and travel,35.00,Lifestyle,0.9,classified
+18,Scented Candle,Lavender scented candle for home decoration,12.00,Lifestyle,0.95,classified
