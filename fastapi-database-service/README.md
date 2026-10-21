@@ -1,4 +1,4 @@
-# Stage 2 SQL and FastAPI Service
+# FastAPI Database Service
 
 A containerised FastAPI service demonstrating SQL, PostgreSQL, SQLite, request validation, API-key authentication, automated testing, external API integration, and Docker packaging.
 
@@ -35,7 +35,7 @@ This project demonstrates:
 ## Project Structure
 
 ```text
-stage2-api-service/
+fastapi-database-service/
 ├── .dockerignore
 ├── .env.example
 ├── .gitignore
