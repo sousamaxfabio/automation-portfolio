@@ -74,7 +74,7 @@ http://ai-api:8000/triage
 ## Project Structure
 
 ```text
-project-4-opspilot-ai/
+opspilot-ai/
 ├── docs/
 │   └── architecture.md
 ├── n8n-workflow/
@@ -138,7 +138,7 @@ Interactive API documentation:
 http://localhost:8000/docs
 ```
 
-Project 4 n8n instance:
+OpsPilot n8n instance:
 
 ```text
 http://localhost:5679
@@ -146,7 +146,7 @@ http://localhost:5679
 
 ### 4. Import the n8n workflow
 
-In the Project 4 n8n instance:
+In the OpsPilot n8n instance:
 
 1. Create a blank workflow.
 2. Select **Import from File** or **Import from JSON**.
@@ -199,7 +199,7 @@ Stop the environment without deleting its data:
 docker compose down
 ```
 
-Do not add `-v` unless you intentionally want to delete the Project 4 n8n volume.
+Do not add `-v` unless you intentionally want to delete the OpsPilot n8n volume.
 
 ## Security
 
@@ -262,7 +262,7 @@ Avoid running `docker compose down -v`.
 
 ## CI Pipeline
 
-GitHub Actions runs when Project 4 files change. It:
+GitHub Actions runs when OpsPilot files change. It:
 
 - Installs Python dependencies
 - Checks Python syntax
