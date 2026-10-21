@@ -90,7 +90,7 @@ Clone the portfolio repository:
 
 ```powershell
 git clone https://github.com/sousamaxfabio/automation-portfolio.git
-cd automation-portfolio\python-automations\stage-1-professional-python\github-repository-monitor
+cd automation-portfolio\github-api-monitor
 ```
 
 Create a virtual environment:
