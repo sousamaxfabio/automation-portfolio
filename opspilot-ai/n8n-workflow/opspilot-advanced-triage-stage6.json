@@ -1,0 +1,1032 @@
+{
+  "name": "OpsPilot Advanced Triage - Stage 6",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "opspilot-stage6",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -320,
+        0
+      ],
+      "id": "8d00e145-6f5c-4812-bb79-8de160020606",
+      "name": "Receive Operations Request.",
+      "webhookId": "41723ba0-e5e8-4e27-bb62-ce92bd378db3"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "KJML9haoNq2B552N",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/KJML9haoNq2B552N",
+          "cachedResultName": "OpsPilot - Validate and Prepare Request"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -144,
+        0
+      ],
+      "id": "41ad17ff-8563-4fe1-992b-4c8a3ca2d2cf",
+      "name": "Validate Request"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://ai-api:8000/triage",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "requester",
+              "value": "={{ $json.requester }}"
+            },
+            {
+              "name": "title",
+              "value": "={{ $json.title }}"
+            },
+            {
+              "name": "description",
+              "value": "={{ $json.description }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        160,
+        208
+      ],
+      "id": "99d43aa2-84f5-4c5d-9a45-d0b0697c4ac9",
+      "name": "Call OpsPilot AI",
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        960,
+        64
+      ],
+      "id": "effd4614-8f58-46a1-8cc2-ae3a8108e360",
+      "name": "Return Triage Result"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "32de4b34-c6e1-41e0-994b-b172f0538e54",
+              "name": "category",
+              "value": "manual_review",
+              "type": "string"
+            },
+            {
+              "id": "60ba2f52-004f-4c50-9fe0-1308688523b9",
+              "name": "urgency",
+              "value": "medium",
+              "type": "string"
+            },
+            {
+              "id": "2e27565a-615f-49bf-815d-30dd358b3ad7",
+              "name": "summary",
+              "value": "Automated triage is temporarily unavailable",
+              "type": "string"
+            },
+            {
+              "id": "28e57770-b1f0-4a36-9f66-af558d0bafd2",
+              "name": "recommended_action",
+              "value": "Route this request to the support queue for manual review",
+              "type": "string"
+            },
+            {
+              "id": "8c6ccab4-fe6d-42cb-ac05-82d12e9b0423",
+              "name": "confidence",
+              "value": 0,
+              "type": "number"
+            },
+            {
+              "id": "e6d1e698-64ae-4698-b8e3-6d6083329454",
+              "name": "request_id",
+              "value": "={{ $execution.id }}",
+              "type": "string"
+            },
+            {
+              "id": "70229afd-f16f-4afe-9d47-5407b45a6ab7",
+              "name": "fallback",
+              "value": true,
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        320,
+        320
+      ],
+      "id": "37232a7c-5999-45d4-93c8-4d3578e0d07d",
+      "name": "Prepare Fallback Response"
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": 503
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        560,
+        544
+      ],
+      "id": "8964f117-5b22-4c07-9801-9315fd432f18",
+      "name": "Return Fallback Result"
+    },
+    {
+      "parameters": {
+        "operation": "rowNotExists",
+        "dataTableId": {
+          "__rl": true,
+          "value": "dyoVDoN1GDcYgsA7",
+          "mode": "list",
+          "cachedResultName": "opspilot_processed_events",
+          "cachedResultUrl": "/projects/uwuMLxPVbDvXNkRM/datatables/dyoVDoN1GDcYgsA7"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "event_id",
+              "keyValue": "={{ $json.event_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        16,
+        96
+      ],
+      "id": "391b2ce8-6b15-49fe-b97d-6b8b0a54c3f9",
+      "name": "Allow New Event"
+    },
+    {
+      "parameters": {
+        "operation": "rowExists",
+        "dataTableId": {
+          "__rl": true,
+          "value": "dyoVDoN1GDcYgsA7",
+          "mode": "list",
+          "cachedResultName": "opspilot_processed_events",
+          "cachedResultUrl": "/projects/uwuMLxPVbDvXNkRM/datatables/dyoVDoN1GDcYgsA7"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "event_id",
+              "keyValue": "={{ $json.event_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        -128
+      ],
+      "id": "1b569f0c-160f-4f18-8a93-460a4981f6d4",
+      "name": "Detect Duplicate Event"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "761592aa-bcfc-4bca-a889-776a3f82ca24",
+              "name": "status",
+              "value": "duplicate_ignored",
+              "type": "string"
+            },
+            {
+              "id": "9d4d9d23-5195-4a60-9cd6-b2a72daa9b85",
+              "name": "message",
+              "value": "This event has already been processed",
+              "type": "string"
+            },
+            {
+              "id": "82903982-f898-44b5-8543-c53492e60eca",
+              "name": "event_id",
+              "value": "={{ $json.event_id }}",
+              "type": "string"
+            },
+            {
+              "id": "74752629-9c28-46a1-9ed9-d64741dbf94d",
+              "name": "duplicate",
+              "value": true,
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        176,
+        -208
+      ],
+      "id": "e40407c3-2c7a-451e-9d5a-d2c19560ff0d",
+      "name": "Prepare Duplicate Response"
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        336,
+        -304
+      ],
+      "id": "e420c7b6-c319-463b-ae79-28b1a153b5ec",
+      "name": "Return Duplicate Result"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5cc1ad3f-a4e9-4b0d-8a37-df8e405383f0",
+              "name": "event_id",
+              "value": "={{ $('Validate Request').item.json.event_id }}",
+              "type": "string"
+            },
+            {
+              "id": "d9041559-1fe7-425b-aa5a-4af563111a16",
+              "name": "status",
+              "value": "completed",
+              "type": "string"
+            },
+            {
+              "id": "521b4735-42ab-4c20-a981-ed02f06bb58f",
+              "name": "result_request_id",
+              "value": "={{ $json.request_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        528,
+        272
+      ],
+      "id": "aa672630-dd87-4e52-a64f-101310a8ac05",
+      "name": "Prepare Processed Event Record"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "dyoVDoN1GDcYgsA7",
+          "mode": "list",
+          "cachedResultName": "opspilot_processed_events",
+          "cachedResultUrl": "/projects/uwuMLxPVbDvXNkRM/datatables/dyoVDoN1GDcYgsA7"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "event_id": "={{ $json.event_id }}",
+            "status": "={{ $json.status }}",
+            "result_request_id": "={{ $json.result_request_id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "event_id",
+              "displayName": "event_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "result_request_id",
+              "displayName": "result_request_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        752,
+        192
+      ],
+      "id": "6009164f-e128-4411-b351-6d15c2d86ec1",
+      "name": "Record Processed Event"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "48daf3fb-6cf3-4eeb-b188-0c1275e61b60",
+              "leftValue": "={{ $json.urgency }}",
+              "rightValue": "high",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "4363d9e8-fa1b-48bb-81a0-0069dfe042f2",
+              "leftValue": "={{ $json.urgency }}",
+              "rightValue": "critical",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        320,
+        112
+      ],
+      "id": "5d5a5adc-a905-4d69-a5cf-ed52a6de010a",
+      "name": "Requires Human Approval"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7244acc1-7880-4e70-8f25-238f5049e2fc",
+              "name": "status",
+              "value": "pending_approval",
+              "type": "string"
+            },
+            {
+              "id": "e17fcfd9-963e-488f-b05c-3aa534aad643",
+              "name": "event_id",
+              "value": "={{ $('Validate Request').item.json.event_id }}",
+              "type": "string"
+            },
+            {
+              "id": "e4904952-6445-43ea-8391-2fda0a8a99d7",
+              "name": "approval_url",
+              "value": "={{ $execution.resumeFormUrl }}",
+              "type": "string"
+            },
+            {
+              "id": "527f54c8-f99e-43af-86db-5025c601f831",
+              "name": "message",
+              "value": "High-urgency request requires human approval",
+              "type": "string"
+            },
+            {
+              "id": "f61f25eb-c329-4fc7-b662-69db9fd20855",
+              "name": "result_request_id",
+              "value": "={{ $json.request_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        512,
+        48
+      ],
+      "id": "52ff392c-97a4-455c-bc3a-ecd60444b872",
+      "name": "Prepare Approval Response"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $('Prepare Approval Response').item.json }}",
+        "options": {
+          "responseCode": 202
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        832,
+        -176
+      ],
+      "id": "52561bf6-e2e3-42a9-a968-1e2fd0aef04d",
+      "name": "Return Pending Approval"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "EQOwyUBOv6ae7LJx",
+          "mode": "list",
+          "cachedResultName": "opspilot_approvals",
+          "cachedResultUrl": "/projects/uwuMLxPVbDvXNkRM/datatables/EQOwyUBOv6ae7LJx"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "event_id": "={{ $json.event_id }}",
+            "request_id": "={{ $json.request_id }}",
+            "status": "={{ $json.status }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "event_id",
+              "displayName": "event_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "request_id",
+              "displayName": "request_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "decision",
+              "displayName": "decision",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "reviewer",
+              "displayName": "reviewer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "comments",
+              "displayName": "comments",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        672,
+        -64
+      ],
+      "id": "e2d41a2d-35f3-4959-ad48-434e1da8c95e",
+      "name": "Save Pending Approval",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "resume": "form",
+        "incomingAuthentication": "basicAuth",
+        "formTitle": "OpsPilot High-Urgency Approval",
+        "formDescription": "={{ 'Event: ' + $('Validate Request').item.json.event_id + '\\nSummary: ' + $('Call OpsPilot AI').item.json.summary + '\\nRecommended action: ' + $('Call OpsPilot AI').item.json.recommended_action }}",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "decision",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "approve"
+                  },
+                  {
+                    "option": "reject"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "reviewer",
+              "placeholder": "Your name",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "comments",
+              "fieldType": "textarea",
+              "placeholder": "Reason for the decision",
+              "requiredField": true
+            }
+          ]
+        },
+        "limitWaitTime": true,
+        "resumeAmount": 24,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1008,
+        -256
+      ],
+      "id": "dd833bb1-077d-4884-871b-df842743eec7",
+      "name": "Wait for Human Approval",
+      "webhookId": "ddc85422-c764-4153-8049-080a800a98dd",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "RxHKdrVeExP3HE0L",
+          "name": "OpsPilot Approval Reviewer"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cc58c9ee-ea19-4096-b662-30cded72f894",
+              "name": "event_id",
+              "value": "={{ $('Validate Request').item.json.event_id }}",
+              "type": "string"
+            },
+            {
+              "id": "4cea59ff-0e5e-476b-9845-63deeab386e3",
+              "name": "request_id",
+              "value": "={{ $('Call OpsPilot AI').item.json.request_id }}",
+              "type": "string"
+            },
+            {
+              "id": "523aa1fe-202b-43e0-b1ff-0b2e7550c385",
+              "name": "=status",
+              "value": "={{ $json.decision === 'approve' ? 'approved' : $json.decision === 'reject' ? 'rejected' : 'expired' }}",
+              "type": "string"
+            },
+            {
+              "id": "425213a6-7fd5-4b5d-9650-c1d337dac608",
+              "name": "=decision",
+              "value": "={{ $json.decision ?? 'timeout' }}",
+              "type": "string"
+            },
+            {
+              "id": "019f4610-2317-4a07-a962-d15ea42bad55",
+              "name": "=reviewer",
+              "value": "={{ $json.reviewer ?? 'system' }}",
+              "type": "string"
+            },
+            {
+              "id": "0e160aeb-3b90-447e-916c-34ac31a4c0a1",
+              "name": "=comments",
+              "value": "={{ $json.comments ?? 'Approval window expired without a response.' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        1152,
+        -352
+      ],
+      "id": "8acb9825-2590-4031-b159-54da3ec81cda",
+      "name": "Prepare Approval Decision"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "EQOwyUBOv6ae7LJx",
+          "mode": "list",
+          "cachedResultName": "opspilot_approvals",
+          "cachedResultUrl": "/projects/uwuMLxPVbDvXNkRM/datatables/EQOwyUBOv6ae7LJx"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "event_id",
+              "keyValue": "={{ $json.event_id }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "event_id": "={{ $json.event_id }}",
+            "request_id": "={{ $json.request_id }}",
+            "status": "={{ $json.status }}",
+            "decision": "={{ $json.decision }}",
+            "reviewer": "={{ $json.reviewer }}",
+            "comments": "={{ $json.comments }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "event_id",
+              "displayName": "event_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "request_id",
+              "displayName": "request_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "decision",
+              "displayName": "decision",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "reviewer",
+              "displayName": "reviewer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "comments",
+              "displayName": "comments",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1312,
+        -208
+      ],
+      "id": "a2903a9a-ccd9-4630-9563-4b3be9028632",
+      "name": "Save Approval Decision",
+      "alwaysOutputData": true
+    }
+  ],
+  "pinData": {
+    "Receive Operations Request.": [
+      {
+        "json": {
+          "headers": {
+            "user-agent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; en-US) WindowsPowerShell/5.1.26100.9711",
+            "content-type": "application/json",
+            "host": "localhost:5679",
+            "content-length": "259",
+            "connection": "Keep-Alive"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "event_id": "stage0-critical-20261022-05",
+            "title": "Critical security incident",
+            "description": "Ransomware is actively encrypting company files across multiple endpoints and disrupting business operations.",
+            "requester": "Fabio"
+          },
+          "webhookUrl": "http://localhost:5679/webhook/opspilot-stage6",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Receive Operations Request.": {
+      "main": [
+        [
+          {
+            "node": "Validate Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Request": {
+      "main": [
+        [
+          {
+            "node": "Allow New Event",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Detect Duplicate Event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call OpsPilot AI": {
+      "main": [
+        [
+          {
+            "node": "Requires Human Approval",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Fallback Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Fallback Response": {
+      "main": [
+        [
+          {
+            "node": "Return Fallback Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Allow New Event": {
+      "main": [
+        [
+          {
+            "node": "Call OpsPilot AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Detect Duplicate Event": {
+      "main": [
+        [
+          {
+            "node": "Prepare Duplicate Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Duplicate Response": {
+      "main": [
+        [
+          {
+            "node": "Return Duplicate Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Processed Event Record": {
+      "main": [
+        [
+          {
+            "node": "Record Processed Event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Requires Human Approval": {
+      "main": [
+        [
+          {
+            "node": "Prepare Approval Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Processed Event Record",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Return Triage Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Approval Response": {
+      "main": [
+        [
+          {
+            "node": "Save Pending Approval",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Record Processed Event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Return Pending Approval": {
+      "main": [
+        [
+          {
+            "node": "Wait for Human Approval",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for Human Approval": {
+      "main": [
+        [
+          {
+            "node": "Prepare Approval Decision",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Approval Decision": {
+      "main": [
+        [
+          {
+            "node": "Save Approval Decision",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Pending Approval": {
+      "main": [
+        [
+          {
+            "node": "Return Pending Approval",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "errorWorkflow": "fAkO6YjfIXd1EL5m"
+  },
+  "versionId": "59e4de22-914f-42a2-92ea-0ddf6cbe8af0",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "1ba455f29a116bfbc00097678303932c5e1e0d9501c9b25ba0fb992a0515bdf1"
+  },
+  "nodeGroups": [],
+  "id": "Ge9TupzjYULhX3y9",
+  "tags": []
+}
+

@@ -6,6 +6,8 @@ A containerised AI operations-triage environment combining n8n, Python, the Open
 
 OpsPilot receives operational requests, validates their input, classifies their category and urgency, recommends an action, and returns a structured response.
 
+The advanced Stage 6 workflow adds duplicate-event protection, persistent audit records, fallback handling, and authenticated human approval for both `high` and `critical` requests.
+
 ## Demonstration
 
 ![Successful OpsPilot AI triage request](screenshots/api-triage-success.png)
@@ -13,11 +15,15 @@ OpsPilot receives operational requests, validates their input, classifies their 
 ## What It Does
 
 1. Receives an operations request through an n8n webhook.
-2. Maps and validates the expected input fields.
-3. Sends the request to a Python API over a private Docker network.
-4. Uses the OpenAI Responses API to analyse the request.
-5. Returns a structured category, urgency, summary, recommendation, confidence score, and request ID.
-6. Preserves the n8n environment using a named Docker volume.
+2. Validates and normalises the expected input fields in a reusable subworkflow.
+3. Rejects previously processed `event_id` values to prevent duplicate work.
+4. Sends new requests to a Python API over a private Docker network.
+5. Uses the OpenAI Responses API to produce structured triage results.
+6. Routes `high` and `critical` requests through an authenticated approval form.
+7. Records pending and completed approval decisions in an n8n Data Table.
+8. Records processed events for auditability and duplicate detection.
+9. Returns a controlled fallback response when the AI service is unavailable.
+10. Uses a dedicated error workflow to persist workflow failures.
 
 ## Example Request
 
@@ -78,7 +84,10 @@ opspilot-ai/
 ├── docs/
 │   └── architecture.md
 ├── n8n-workflow/
-│   └── opspilot-triage-workflow.json
+│   ├── opspilot-triage-workflow.json
+│   ├── opspilot-advanced-triage-stage6.json
+│   ├── opspilot-error-handler.json
+│   └── opspilot-validate-and-prepare-request.json
 ├── screenshots/
 │   └── api-triage-success.png
 ├── tests/
@@ -144,15 +153,85 @@ OpsPilot n8n instance:
 http://localhost:5679
 ```
 
-### 4. Import the n8n workflow
+### 4. Import the n8n workflows
 
 In the OpsPilot n8n instance:
 
-1. Create a blank workflow.
-2. Select **Import from File** or **Import from JSON**.
-3. Choose `n8n-workflow/opspilot-triage-workflow.json`.
-4. Keep the workflow unpublished until its nodes have been reviewed.
-5. Publish it when ready to use the production webhook.
+1. Import `n8n-workflow/opspilot-validate-and-prepare-request.json`.
+2. Import `n8n-workflow/opspilot-error-handler.json`.
+3. Import `n8n-workflow/opspilot-advanced-triage-stage6.json`.
+4. Open **Validate Request** in the advanced workflow and select the imported validator workflow.
+5. In the advanced workflow settings, select the imported error-handler workflow.
+6. Keep the workflows unpublished until their nodes and local resources have been reviewed.
+
+The original introductory workflow remains available as `n8n-workflow/opspilot-triage-workflow.json`.
+
+### 5. Create the advanced workflow Data Tables
+
+Create `opspilot_processed_events` with these string columns:
+
+```text
+event_id
+status
+result_request_id
+```
+
+Create `opspilot_approvals` with these string columns:
+
+```text
+event_id
+request_id
+status
+decision
+reviewer
+comments
+```
+
+Create `opspilot_error_audit` with these columns:
+
+```text
+timestamp        date/time
+status           string
+workflow_name    string
+workflow_id      string
+failed_node      string
+error_message    string
+execution_id     string
+execution_url    string
+```
+
+In the advanced workflow, select `opspilot_processed_events` in **Allow New Event**, **Detect Duplicate Event**, and **Record Processed Event**. Select `opspilot_approvals` in **Save Pending Approval** and **Save Approval Decision**. In the error-handler workflow, select `opspilot_error_audit` in **Save Error Audit Record**.
+
+### 6. Configure approval authentication and publish
+
+1. Create an n8n **Basic Auth** credential for the approval reviewer.
+2. Select it in **Wait for Human Approval**.
+3. Confirm that **Requires Human Approval** uses `urgency = high OR urgency = critical`.
+4. Publish the validator, error-handler, and advanced workflows.
+
+The production webhook is:
+
+```text
+POST http://localhost:5679/webhook/opspilot-stage6
+```
+
+Every request must include a unique `event_id`.
+
+## Advanced Verification
+
+A critical ransomware-style request was used for final verification. The workflow returned HTTP `202`, created a pending approval record, generated an authenticated approval URL, accepted the reviewer decision, and persisted the processed-event audit record.
+
+Example pending response fields:
+
+```json
+{
+  "urgency": "critical",
+  "status": "pending_approval",
+  "event_id": "stage0-critical-20261022-05",
+  "approval_url": "http://localhost:5679/form-waiting/...",
+  "message": "High-urgency request requires human approval"
+}
+```
 
 ## Run Automated Tests
 
@@ -281,3 +360,4 @@ This is a personal portfolio project demonstrating an end-to-end n8n-to-Python A
 The automated tests use a mocked AI client. They verify application behaviour, not the accuracy of live AI classifications. The model's confidence value is self-reported and is not a calibrated probability. A human should review recommendations before taking action.
 
 The service does not currently implement caller authentication, rate limiting, durable request storage or an evaluation dataset. Add these controls and verify deployment configuration before exposing it beyond a controlled demonstration environment.
+

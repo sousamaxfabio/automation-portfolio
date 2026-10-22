@@ -16,7 +16,7 @@ I build automation workflows and API integrations that turn incoming requests in
 
 **n8n + FastAPI + OpenAI + Docker Compose**
 
-Receives operational requests through an n8n webhook, validates input, sends it to a Python API for structured AI triage, and returns category, urgency and recommended action. Includes a reproducible Docker setup, GitHub Actions CI, automated tests and a documented architecture.
+Receives operational requests through an n8n webhook, validates input, prevents duplicate processing, and uses a Python API for structured AI triage. High and critical requests enter an authenticated human-approval flow, while Data Tables preserve approval, processed-event and failure audit records. Includes a reproducible Docker setup, GitHub Actions CI, automated tests and documented architecture.
 
 [**See screenshot, workflow and how to run it →**](opspilot-ai/README.md)
 
@@ -78,3 +78,4 @@ I previously worked in enterprise IT support, investigating incidents and helpin
 ## Learning archive
 
 Earlier step-by-step exercises are preserved in [**Learning Labs**](archive/learning-labs/README.md). They are separate from the featured projects above.
+

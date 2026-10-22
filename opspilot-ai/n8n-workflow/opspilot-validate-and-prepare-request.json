@@ -1,0 +1,58 @@
+{
+  "name": "OpsPilot - Validate and Prepare Request",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "dd869892-c8e9-41da-b697-ed4e6833e045",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map((item, index) => {\n  const source = item.json.body ?? item.json;\n\n  const eventId =\n    typeof source.event_id === 'string' ? source.event_id.trim() : '';\n  const requester =\n    typeof source.requester === 'string' ? source.requester.trim() : '';\n  const title =\n    typeof source.title === 'string' ? source.title.trim() : '';\n  const description =\n    typeof source.description === 'string' ? source.description.trim() : '';\n\n  const missingFields = [];\n\n  if (!eventId) missingFields.push('event_id');\n  if (!requester) missingFields.push('requester');\n  if (!title) missingFields.push('title');\n  if (!description) missingFields.push('description');\n\n  if (missingFields.length > 0) {\n    throw new Error(\n      `Item ${index + 1}: missing or empty required fields: ${missingFields.join(', ')}`\n    );\n  }\n\n  if (eventId.length > 100) {\n    throw new Error(`Item ${index + 1}: event_id exceeds 100 characters`);\n  }\n\n  if (!/^[A-Za-z0-9._:-]+$/.test(eventId)) {\n    throw new Error(\n      `Item ${index + 1}: event_id contains unsupported characters`\n    );\n  }\n\n  if (requester.length > 100) {\n    throw new Error(`Item ${index + 1}: requester exceeds 100 characters`);\n  }\n\n  if (title.length > 200) {\n    throw new Error(`Item ${index + 1}: title exceeds 200 characters`);\n  }\n\n  if (description.length > 5000) {\n    throw new Error(`Item ${index + 1}: description exceeds 5000 characters`);\n  }\n\n  return {\n    json: {\n      event_id: eventId,\n      requester,\n      title,\n      description,\n    },\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        0
+      ],
+      "id": "fe80b9fd-977c-4e03-8860-61ca3d76a101",
+      "name": "Validate and Normalize Request"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Validate and Normalize Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "880f903c-8c8e-4656-ac83-bc21b0a4f6c4",
+  "meta": {
+    "instanceId": "1ba455f29a116bfbc00097678303932c5e1e0d9501c9b25ba0fb992a0515bdf1"
+  },
+  "nodeGroups": [],
+  "id": "KJML9haoNq2B552N",
+  "tags": []
+}
+
